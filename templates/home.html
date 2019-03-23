@@ -7,18 +7,23 @@
 	<body>
 		{% extends "base.html" %}
 		{% block content %}
-		<div class="home">
-			<form class="candidates">
+		<h4>Democratic Party Presidential Primary 2020</h4>
+		<div class="candidates">
+			<div class="btn-group btn-group-justified" role="group" aria-label="...">
 				{% for candidate in candidates %}
-				<input type="radio" name="person">{{ candidate }}<br>
+				<div class="btn-group" role="group">
+			      <button type="button" class="btn btn-default">{{ candidate }}</button>
+			    </div>
 				{% endfor %}
-			</form>
-			<div class="map">
-
 			</div>
-			<div class="select-state">
+		</div>
 
-			</div>
+		<div class="map">
+
+		</div>
+
+		<div class="select-state">
+
 		</div>
 		{% endblock %}
 	</body>
