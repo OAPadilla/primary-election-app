@@ -4,16 +4,17 @@ from flask_bootstrap import Bootstrap
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
 
-
-c = ["Joe Biden", "Bernie Sanders", "Kamala Harris", "Beto O'Rourke",
-     "Elizabeth Warren", "Cory Booker", "Amy Klobuchar", "Pete Buttigieg"]
-
 @app.route("/")
 @app.route("/index")
 def home():
+    candidates = ["Joe Biden", "Bernie Sanders", "Kamala Harris", "Beto O'Rourke",
+                  "Elizabeth Warren", "Cory Booker", "Amy Klobuchar", "Pete Buttigieg"]
+    values = [29, 23, 10, 8, 7, 4, 2, 1]
+    colors = [ "#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA","#ABCDEF", "#DDDDDD", "#ABCABC" ]
     return render_template(
         "home.html",
-        candidates=c
+        candidates=candidates,
+        set=zip(values, candidates, colors)
     )
 
 
