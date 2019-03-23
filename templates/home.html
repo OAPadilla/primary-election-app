@@ -5,10 +5,20 @@
 		<title>Primary Election Map</title>
 	</head>
 	<body>
-		{% extends "layout.html" %}
+		{% extends "base.html" %}
 		{% block content %}
 		<div class="home">
-			
+			<form class="candidates">
+				{% for candidate in candidates %}
+				<input type="radio" name="person">{{ candidate }}<br>
+				{% endfor %}
+			</form>
+			<div class="map">
+
+			</div>
+			<div class="select-state">
+
+			</div>
 		</div>
 		{% endblock %}
 	</body>
