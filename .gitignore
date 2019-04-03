@@ -1,3 +1,4 @@
 .idea/
 venv/
 election-details.gsheet
+state.py
