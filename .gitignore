@@ -2,3 +2,4 @@
 venv/
 election-details.gsheet
 state.py
+data/

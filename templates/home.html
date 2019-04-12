@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<h4>Democratic Party Presidential Primary 2020</h4>
+<h2>Democratic Party Presidential Primary 2020</h2>
 <div class="candidates">
 	<div class="btn-group" role="group" aria-label="..." data-toggle="buttons">
 		{% for candidate in candidates %}
@@ -12,32 +12,12 @@
 </div>
 
 <div class="map">
-
+	<div class="map-chart"></div>
+	<script src="{{ url_for('static', filename='js/map.js')}}" type="text/javascript"></script>
 </div>
 
-<div class="pie-chart">
-	<canvas id="chart" width="600" height="400"></canvas>
-	<script>
-	   	var pieData = [
-            {% for value,candidate,color in set %}
-            {
-                value: {{ value }},
-                candidate: "{{ candidate }}",
-                color : "{{ color }}",
-				label: "{{ candidate }}",
-            },
-            {% endfor %}
-		];
-	   	// get bar chart canvas<br />
-	   	var mychart = document.getElementById("chart").getContext("2d");
-	   	steps = 10
-	   	max = 10
-	   	// draw pie chart<br />
-	   	new Chart(document.getElementById("chart").getContext("2d")).Pie(pieData);
-	</script>
-</div>
-
-<div class="select-state">
-
+<div class="pie">
+	<div class="pie-chart"></div>
+	<script src="{{ url_for('static', filename='js/pie.js')}}" type="text/javascript"></script>
 </div>
 {% endblock %}

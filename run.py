@@ -7,7 +7,7 @@ bootstrap = Bootstrap(app)
 @app.route("/")
 @app.route("/index")
 def home():
-    candidates = ["Joe Biden", "Bernie Sanders", "Kamala Harris", "Beto O'Rourke",
+    candidates = ["Joe Biden", "Bernie Sanders", "Kamala Harris", "Beto ORourke",
                   "Elizabeth Warren", "Cory Booker", "Amy Klobuchar", "Pete Buttigieg"]
     values = [29, 23, 10, 8, 7, 4, 2, 1]
     colors = [ "#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA","#ABCDEF", "#DDDDDD", "#ABCABC" ]
@@ -27,6 +27,6 @@ def about():
 def page_not_found(error):
     return render_template("404.html"), 404
 
-
+# localhost:5000
 if __name__ == "__main__":
     app.run(debug=True)
