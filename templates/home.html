@@ -5,7 +5,7 @@
 	<div class="btn-group" role="group" aria-label="..." data-toggle="buttons">
 		{% for candidate in candidates %}
 		<label class="btn btn-primary" role="group">
-			<input type="radio" name="candidate"> {{ candidate }}
+			<input type="radio" name="candidate" value="{{ candidate }}">{{ candidate }}
 		</label>
 		{% endfor %}
 	</div>

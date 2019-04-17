@@ -10,6 +10,24 @@
 //         .style("width", function(d) { return d + "px"; })
 //         .text(function(d) { return d; });
 
+const defaultColor = "black"
+
+// temporary data
+var data = [
+    {
+        "name": "Joe Biden",
+        "color": "red"
+    },
+    {
+        "name": "Bernie Sanders",
+        "color": "blue"
+    },
+    {
+        "name": "Kamala Harris",
+        "color": "purple"
+    }
+];
+
 var svg = d3.select("svg");
 
 var path = d3.geoPath();
@@ -23,10 +41,34 @@ d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
         .data(topojson.feature(us, us.objects.states).features)
         .enter().append("path")
         .attr("d", path)
+        .on("click", changeColor);
 
     svg.append("path")
         .attr("class", "state-borders")
         .attr("d", path(topojson.mesh(us, us.objects.states, function(a, b) {
             return a !== b;
         })));
+});
+
+var changeColor = (function() {
+    // Get selected candidate name and color
+    var candidateName = d3.select("input[name='candidate']:checked").property("value");
+
+    // Get current color of selected state
+    var currentColor = d3.select(this).style('fill');
+
+    // Get appropriate color for candidate
+    var candidateColor = defaultColor;
+    for (var i = 0; i < data.length; ++i) {
+        if (data[i].name === candidateName) {
+            candidateColor = data[i].color;
+        }
+    }
+
+    // Change color to default if same candidate color, otherwise change to new color
+    if (currentColor === candidateColor) {
+        d3.select(this).style("fill", defaultColor);
+    } else {
+        d3.select(this).style("fill", candidateColor);
+    }
 });
