@@ -7,8 +7,9 @@ bootstrap = Bootstrap(app)
 @app.route("/")
 @app.route("/index")
 def home():
-    candidates = ["Joe Biden", "Bernie Sanders", "Kamala Harris", "Beto ORourke",
-                  "Elizabeth Warren", "Cory Booker", "Amy Klobuchar", "Pete Buttigieg"]
+    candidates = [("Joe Biden", 51), ("Bernie Sanders", 24.5), ("Kamala Harris", 12.3),
+                  ("Beto ORourke", 6), ("Elizabeth Warren", 3), ("Cory Booker", 1.5),
+                  ("Amy Klobuchar", 1), ("Pete Buttigieg", 0.7)]
     values = [29, 23, 10, 8, 7, 4, 2, 1]
     colors = [ "#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA","#ABCDEF", "#DDDDDD", "#ABCABC" ]
     return render_template(

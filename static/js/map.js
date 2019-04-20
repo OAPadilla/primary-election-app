@@ -13,7 +13,7 @@
 const defaultColor = "black"
 
 // temporary data
-var data = [
+var candidateData = [
     {
         "name": "Joe Biden",
         "color": "red"
@@ -25,6 +25,23 @@ var data = [
     {
         "name": "Kamala Harris",
         "color": "purple"
+    }
+];
+
+var stateData = [
+    {
+        "name": "Florida",
+        "initial": "FL",
+        "delegates": 219,
+        "super": 29,
+        "type": "closed primary",
+        "allocation": "proportional",
+        "date": "3-17-2020",
+        "results": {
+            "Joe Biden": 51,
+            "Bernie Sanders": 30,
+            "Kamala Harris": 19
+        }
     }
 ];
 
@@ -59,9 +76,9 @@ var changeColor = (function() {
 
     // Get appropriate color for candidate
     var candidateColor = defaultColor;
-    for (var i = 0; i < data.length; ++i) {
-        if (data[i].name === candidateName) {
-            candidateColor = data[i].color;
+    for (var i = 0; i < candidateData.length; ++i) {
+        if (candidateData[i].name === candidateName) {
+            candidateColor = candidateData[i].color;
         }
     }
 
@@ -72,3 +89,7 @@ var changeColor = (function() {
         d3.select(this).style("fill", candidateColor);
     }
 });
+
+var updateStateResults = (function() {
+
+})
