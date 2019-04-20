@@ -25,7 +25,7 @@
 //         "color": "purple"
 //     }
 // ];
-
+// temporary data
 var stateData = [
     {
         "name": "Florida",
@@ -49,6 +49,7 @@ var svg = d3.select("svg");
 
 var path = d3.geoPath();
 
+// US Map Generation with D3
 d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
     if (error) throw error;
 
@@ -67,8 +68,8 @@ d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
         })));
 });
 
+// Clicking On States Actions
 var selectState = (function() {
-
     // Get selected candidate name and color
     var candidateName = d3.select("input[name='candidate']:checked").property("value");
     console.log(candidateName)
@@ -104,6 +105,7 @@ var updateStateResults = (function() {
 
 });
 
+// Resets Map Back to Default
 var resetMap = (function() {
     svg.selectAll("*").style("fill", defaultColor);
 });

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>Democratic Party Presidential Primary 2020</h2>
+<!-- Candidate Selection Buttons -->
 <div class="candidates">
 	<div class="btn-group" role="group" aria-label="..." data-toggle="buttons">
 		<label class="btn btn-default" role="group">
@@ -15,11 +16,13 @@
 	<button type="button" class="btn btn-danger" onclick="resetMap()">Reset</button>
 </div>
 
+<!-- United States Map -->
 <div class="map">
 	<svg width="960" height="600"></svg>
 	<script src="{{ url_for('static', filename='js/map.js')}}" type="text/javascript"></script>
 </div>
 
+<!-- State Results Configuration Options-->
 <!-- add APPLY button and logic -->
 <div class="state-options">
 	<div class="btn-group-vertical" role="group" aria-label="...">
@@ -34,13 +37,14 @@
 					<input type="number" class="form-control" aria-label="..." min="0" oninput="validity.valid||(value='');" step=0.1 value="{{ default_value }}">
 					<span class="input-group-addon" id="addon-perc">%</span>
 					<span class="input-group-addon" id="addon-deleg">_ Delegates</span>
-				</div><!-- /input-group -->
-		  	</div><!-- /.col-lg-6 -->
-		</div><!-- /.row -->
+				</div>
+		  	</div>
+		</div>
 		{% endfor %}
 	</div>
 </div>
 
+<!-- Total Delegate Count Pie Chart -->
 <div class="pie">
 	<div class="pie-chart"></div>
 	<script src="{{ url_for('static', filename='js/pie.js')}}" type="text/javascript"></script>

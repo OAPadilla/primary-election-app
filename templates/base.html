@@ -6,13 +6,14 @@
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/layout.css') }}">
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="{{ \
-            url_for(\'static\', filename=\'lib/jquery-3.4.0.min.js\') }}"></script>')</script>
+            url_for(\'static\', filename=\'js/lib/jquery-3.4.0.min.js\') }}"></script>')</script>
         <script src="https://d3js.org/d3.v4.min.js"></script>
         <script src="https://d3js.org/topojson.v2.min.js"></script>
     </head>
     <body>
         {% extends "bootstrap/base.html" %}
         {% block navbar %}
+        <!-- Navigation Bar -->
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <!-- Brand and toggle -->
