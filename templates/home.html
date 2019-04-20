@@ -3,12 +3,16 @@
 <h2>Democratic Party Presidential Primary 2020</h2>
 <div class="candidates">
 	<div class="btn-group" role="group" aria-label="..." data-toggle="buttons">
+		<label class="btn btn-default" role="group">
+			<input type="radio" name="candidate" value="Custom" checked>Custom
+		</label>
 		{% for candidate, default_value in candidates %}
-		<label class="btn btn-primary" role="group">
+		<label class="btn btn-default" role="group">
 			<input type="radio" name="candidate" value="{{ candidate }}">{{ candidate }}
 		</label>
 		{% endfor %}
 	</div>
+	<button type="button" class="btn btn-danger" onclick="resetMap()">Reset</button>
 </div>
 
 <div class="map">
@@ -16,8 +20,9 @@
 	<script src="{{ url_for('static', filename='js/map.js')}}" type="text/javascript"></script>
 </div>
 
+<!-- add APPLY button and logic -->
 <div class="state-options">
-	<div class="btn-group-vertical" role="group" aria-label="..." data-toggle="buttons">
+	<div class="btn-group-vertical" role="group" aria-label="...">
 		{% for candidate, default_value in candidates %}
 		<div class="row">
 		  	<div class="col-sm-6">

@@ -10,8 +10,6 @@
 //         .style("width", function(d) { return d + "px"; })
 //         .text(function(d) { return d; });
 
-const defaultColor = "black"
-
 // temporary data
 var candidateData = [
     {
@@ -45,6 +43,8 @@ var stateData = [
     }
 ];
 
+const defaultColor = $('.states').css("fill");
+
 var svg = d3.select("svg");
 
 var path = d3.geoPath();
@@ -58,7 +58,7 @@ d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
         .data(topojson.feature(us, us.objects.states).features)
         .enter().append("path")
         .attr("d", path)
-        .on("click", changeColor);
+        .on("click", selectState);
 
     svg.append("path")
         .attr("class", "state-borders")
@@ -67,29 +67,43 @@ d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
         })));
 });
 
-var changeColor = (function() {
+var selectState = (function() {
+
     // Get selected candidate name and color
     var candidateName = d3.select("input[name='candidate']:checked").property("value");
+    console.log(candidateName)
 
     // Get current color of selected state
     var currentColor = d3.select(this).style('fill');
 
-    // Get appropriate color for candidate
-    var candidateColor = defaultColor;
-    for (var i = 0; i < candidateData.length; ++i) {
-        if (candidateData[i].name === candidateName) {
-            candidateColor = candidateData[i].color;
+    if (candidateName !== "Custom") {
+        // Get appropriate color for candidate
+        var candidateColor = defaultColor;
+        for (var i = 0; i < candidateData.length; ++i) {
+            if (candidateData[i].name === candidateName) {
+                candidateColor = candidateData[i].color;
+            }
         }
-    }
 
-    // Change color to default if same candidate color, otherwise change to new color
-    if (currentColor === candidateColor) {
-        d3.select(this).style("fill", defaultColor);
+        // Change color to default if same candidate color, otherwise change to new color
+        if (currentColor === candidateColor) {
+            d3.select(this).style("fill", defaultColor);
+        } else {
+            d3.select(this).style("fill", candidateColor);
+        }
     } else {
-        d3.select(this).style("fill", candidateColor);
+        updateStateResults();
     }
+});
+
+var updateStateColor = (function(candidateName, currentColor) {
+    console.log("update state color test")
 });
 
 var updateStateResults = (function() {
 
-})
+});
+
+var resetMap = (function() {
+    svg.selectAll("*").style("fill", defaultColor);
+});
