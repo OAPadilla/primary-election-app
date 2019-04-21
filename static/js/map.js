@@ -11,21 +11,20 @@
 //         .text(function(d) { return d; });
 
 // temporary data
-// var candidateData = [
-//     {
-//         "name": "Joe Biden",
-//         "color": "red"
-//     },
-//     {
-//         "name": "Bernie Sanders",
-//         "color": "blue"
-//     },
-//     {
-//         "name": "Kamala Harris",
-//         "color": "purple"
-//     }
-// ];
-// temporary data
+var candidateData = [
+    {
+        "name": "Joe Biden",
+        "color": "red"
+    },
+    {
+        "name": "Bernie Sanders",
+        "color": "blue"
+    },
+    {
+        "name": "Kamala Harris",
+        "color": "purple"
+    }
+];
 var stateData = [
     {
         "name": "Florida",
