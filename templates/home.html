@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
+<!-- Share data with map.js -->
+<script type="text/javascript">
+	candidateData = {{ candidates|tojson }}
+	stateData = {{ states|tojson }}
+</script>
+
 <h2>Democratic Party Presidential Primary 2020</h2>
 <!-- Candidate Selection Buttons -->
 <div class="candidates">
@@ -7,9 +13,9 @@
 		<label class="btn btn-default" role="group">
 			<input type="radio" name="candidate" value="Custom" checked>Custom
 		</label>
-		{% for candidate, default_value in candidates %}
+		{% for candidate in candidates %}
 		<label class="btn btn-default" role="group">
-			<input type="radio" name="candidate" value="{{ candidate }}">{{ candidate }}
+			<input type="radio" name="candidate" value="{{ candidate.name }}">{{ candidate.name }}
 		</label>
 		{% endfor %}
 	</div>
@@ -26,17 +32,17 @@
 <!-- add APPLY button and logic -->
 <div class="state-options">
 	<div class="btn-group-vertical" role="group" aria-label="...">
-		{% for candidate, default_value in candidates %}
+		{% for candidate in candidates %}
 		<div class="row">
 		  	<div class="col-sm-6">
 		    	<div class="input-group">
 		      		<span class="input-group-addon">
 		        		<input type="checkbox" aria-label="..." checked>
 		      		</span>
-					<span class="input-group-addon" id="addon-cand">{{ candidate }}</span>
-					<input type="number" class="form-control" aria-label="..." min="0" oninput="validity.valid||(value='');" step=0.1 value="{{ default_value }}">
+					<span class="input-group-addon" id="addon-cand">{{ candidate.name }}</span>
+					<input type="number" class="form-control" aria-label="..." min="0" oninput="validity.valid||(value='');" step=0.1 value="">
 					<span class="input-group-addon" id="addon-perc">%</span>
-					<span class="input-group-addon" id="addon-deleg">_ Delegates</span>
+					<span class="input-group-addon" id="addon-deleg">_ Delegates</span> <!-- get delegate count mathematically -->
 				</div>
 		  	</div>
 		</div>

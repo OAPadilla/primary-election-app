@@ -10,38 +10,6 @@
 //         .style("width", function(d) { return d + "px"; })
 //         .text(function(d) { return d; });
 
-// temporary data
-var candidateData = [
-    {
-        "name": "Joe Biden",
-        "color": "red"
-    },
-    {
-        "name": "Bernie Sanders",
-        "color": "blue"
-    },
-    {
-        "name": "Kamala Harris",
-        "color": "purple"
-    }
-];
-var stateData = [
-    {
-        "name": "Florida",
-        "initial": "FL",
-        "delegates": 219,
-        "super": 29,
-        "type": "closed primary",
-        "allocation": "proportional",
-        "date": "3-17-2020",
-        "results": {
-            "Joe Biden": 51,
-            "Bernie Sanders": 30,
-            "Kamala Harris": 19
-        }
-    }
-];
-
 const defaultColor = $('.states').css("fill");
 
 var svg = d3.select("svg");
