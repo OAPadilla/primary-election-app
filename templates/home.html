@@ -2,11 +2,12 @@
 {% block content %}
 <!-- Share data with map.js -->
 <script type="text/javascript">
-	candidateData = {{ candidates|tojson }}
-	stateData = {{ states|tojson }}
+	var candidateData = {{ candidates|tojson }}
+	var stateData = {{ states|tojson }}
 </script>
 
 <h2>Democratic Party Presidential Primary 2020</h2>
+
 <!-- Candidate Selection Buttons -->
 <div class="candidates">
 	<div class="btn-group" role="group" aria-label="..." data-toggle="buttons">
@@ -40,9 +41,9 @@
 		        		<input type="checkbox" aria-label="..." checked>
 		      		</span>
 					<span class="input-group-addon" id="addon-cand">{{ candidate.name }}</span>
-					<input type="number" class="form-control" aria-label="..." min="0" oninput="validity.valid||(value='');" step=0.1 value="">
+					<input type="number" class="form-control" id="perc-vals" aria-label="..." min="0" oninput="validity.valid||(value='');" step=0.1 value="{{ candidate.poll }}">
 					<span class="input-group-addon" id="addon-perc">%</span>
-					<span class="input-group-addon" id="addon-deleg">_ Delegates</span> <!-- get delegate count mathematically -->
+					<span class="input-group-addon" id="addon-deleg">_ Delegates</span> <!-- calculate delegate count -->
 				</div>
 		  	</div>
 		</div>

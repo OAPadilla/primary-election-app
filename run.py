@@ -8,15 +8,18 @@ bootstrap = Bootstrap(app)
 candidates = [
     {
         "name": "Joe Biden",
-        "color": "red"
+        "color": "red",
+        "poll": 51
     },
     {
         "name": "Bernie Sanders",
-        "color": "blue"
+        "color": "blue",
+        "poll": 24
     },
     {
         "name": "Kamala Harris",
-        "color": "purple"
+        "color": "purple",
+        "poll": 11
     }
 ]
 states = [
@@ -30,8 +33,8 @@ states = [
         "date": "2020-3-17",
         "results": {
             "Joe Biden": 51,
-            "Bernie Sanders": 30,
-            "Kamala Harris": 19
+            "Bernie Sanders": 24,
+            "Kamala Harris": 11
         }
     },
     {
@@ -44,8 +47,8 @@ states = [
         "date": "2020-2-3",
         "results": {
             "Joe Biden": 51,
-            "Bernie Sanders": 30,
-            "Kamala Harris": 19
+            "Bernie Sanders": 24,
+            "Kamala Harris": 11
         }
     },
     {
@@ -58,8 +61,8 @@ states = [
         "date": "2020-2-11",
         "results": {
             "Joe Biden": 51,
-            "Bernie Sanders": 30,
-            "Kamala Harris": 19
+            "Bernie Sanders": 24,
+            "Kamala Harris": 11
         }
     }
 ]
