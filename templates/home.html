@@ -32,23 +32,8 @@
 <!-- State Results Configuration Options-->
 <!-- add APPLY button and logic -->
 <div class="state-options">
-	<div class="btn-group-vertical" role="group" aria-label="...">
-		{% for candidate in candidates %}
-		<div class="row">
-		  	<div class="col-sm-6">
-		    	<div class="input-group">
-		      		<span class="input-group-addon">
-		        		<input type="checkbox" aria-label="..." checked>
-		      		</span>
-					<span class="input-group-addon" id="addon-cand">{{ candidate.name }}</span>
-					<input type="number" class="form-control" id="perc-vals" aria-label="..." min="0" oninput="validity.valid||(value='');" step=0.1 value="{{ candidate.poll }}">
-					<span class="input-group-addon" id="addon-perc">%</span>
-					<span class="input-group-addon" id="addon-deleg">_ Delegates</span> <!-- calculate delegate count -->
-				</div>
-		  	</div>
-		</div>
-		{% endfor %}
-	</div>
+	<h4 id="state-options-info"></h4>
+	<div class="btn-group-vertical" role="group" aria-label="..." id="state-options-rows"></div>
 </div>
 
 <!-- Total Delegate Count Pie Chart -->

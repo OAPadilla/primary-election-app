@@ -11,12 +11,10 @@
 //         .text(function(d) { return d; });
 
 const defaultColor = $('.states').css("fill");
+var stateName;
 
 var svg = d3.select("svg");
-
 var path = d3.geoPath();
-
-var stateName = ''
 
 // US Map Generation with D3
 d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
@@ -61,32 +59,32 @@ d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
 
 // Clicking On States Actions
 var selectState = (function() {
-    // Get selected candidate name and color
+    // Get selected candidate name
     var candidateName = d3.select("input[name='candidate']:checked").property("value");
     console.log(candidateName)
     console.log(stateName)
 
-    // Get current color of selected state
-    var currentColor = d3.select(this).style('fill');
-
     // If user selected state with candidate chosen
     if (candidateName !== "Custom") {
-        // Get appropriate color for candidate
-        var candidateColor = defaultColor;
-        for (var i = 0; i < candidateData.length; ++i) {
-            if (candidateData[i].name === candidateName) {
-                candidateColor = candidateData[i].color;
+        // Get current color of selected state
+        var currentColor = d3.select(this).style('fill');
+
+        // Update state color depending on candidate
+        updateStateColor(d3.select(this), candidateName, currentColor);
+
+        // Selected State Options HTML
+        for (var i = 0; i < stateData.length; i++) {
+            if (stateData[i].name === stateName) {
+                // Update State Data results with chosen color candidate as first
+                stateData[i].results[0][candidateName] = 51
+                //FIXME: Add management of numbers for rest of candidates so its automatic
+
+                // State description and candidate results
+                showStateResults(stateData[i]);
+                break;
             }
         }
-
-        // Change color to default if same candidate color, otherwise change to new color
-        if (currentColor === candidateColor) {
-            d3.select(this).style("fill", defaultColor);
-        } else {
-            d3.select(this).style("fill", candidateColor);
-        }
-
-        // change percentage values to default values for each candidate in selected state
+        // Set selected candidate to 51%, and change the rest to defaults
 
         // d3.select(".perc-vals").property("value") = d3.selectcandidateName.
 
@@ -94,13 +92,61 @@ var selectState = (function() {
 
     // Else, user selected state with Custom
     } else {
-        console.log("update state color test")
-        // updateStateResults();
+        // Selected State Options HTML
+        for (var i = 0; i < stateData.length; i++) {
+            if (stateData[i].name === stateName) {
+                // State description and candidate results
+                showStateResults(stateData[i]);
+                break;
+            }
+        }
+
     }
 });
 
-var updateStateColor = (function(candidateName, currentColor) {
-    console.log("update state color test")
+// Updates US Map SVG State to appropriate color based on candidate
+var updateStateColor = (function(d3Obj, candidateName, currentColor) {
+    // Get candidates color
+    var candidateColor = defaultColor;
+    for (var i = 0; i < candidateData.length; ++i) {
+        if (candidateData[i].name === candidateName) {
+            candidateColor = candidateData[i].color;
+        }
+    }
+
+    // Change state color to default if same candidate color, otherwise change to new color
+    if (currentColor === candidateColor) {
+        d3Obj.style("fill", defaultColor);
+    } else {
+        d3Obj.style("fill", candidateColor);
+    }
+});
+
+// Update HTML for State Options that contains State description and results
+var showStateResults = (function(selectedState) {
+    // State description
+    $("#state-options-info").text(stateName + " | " + selectedState.type
+        + " | " + selectedState.delegates + " Delegates");
+
+    // State candidate results
+    $("#state-options-rows").html('');
+    for (var j = 0; j < candidateData.length; j++) {
+        $("#state-options-rows").append(`
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <input type="checkbox" aria-label="..." checked>
+                        </span>
+                        <span class="input-group-addon" id="addon-cand">` + candidateData[j].name + `</span>
+                        <input type="number" class="form-control" id="perc-vals" aria-label="..." min="0" oninput="validity.valid||(value='');" step=0.1 value="` + selectedState.results[0][candidateData[j].name] + `">
+                        <span class="input-group-addon" id="addon-perc">%</span>
+                        <span class="input-group-addon" id="addon-deleg">_ Delegates</span>
+                    </div>
+                </div>
+            </div>`
+        );
+    }
 });
 
 var updateStateResults = (function() {
@@ -110,4 +156,5 @@ var updateStateResults = (function() {
 // Resets Map Back to Default
 var resetMap = (function() {
     svg.selectAll("*").style("fill", defaultColor);
+    // Change all state results back to default (from candidates[0].poll)
 });
