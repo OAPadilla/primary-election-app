@@ -2,8 +2,8 @@
 {% block content %}
 <!-- Share data with map.js -->
 <script type="text/javascript">
-	var candidateData = {{ candidates|tojson }}
-	var stateData = {{ states|tojson }}
+	var candidateData = JSON.parse('{{ candidates|tojson }}');
+	var stateData = JSON.parse('{{ states|tojson }}');
 </script>
 
 <h2>Democratic Party Presidential Primary 2020</h2>

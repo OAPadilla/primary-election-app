@@ -10,6 +10,10 @@
 //         .style("width", function(d) { return d + "px"; })
 //         .text(function(d) { return d; });
 
+console.log(stateData)
+stateData[0].results[0][candidateData[1].name] = 99
+console.log(stateData)
+
 const defaultColor = $('.states').css("fill");
 var stateName;
 
@@ -66,11 +70,8 @@ var selectState = (function() {
 
     // If user selected state with candidate chosen
     if (candidateName !== "Custom") {
-        // Get current color of selected state
-        var currentColor = d3.select(this).style('fill');
-
         // Update state color depending on candidate
-        updateStateColor(d3.select(this), candidateName, currentColor);
+        updateStateColor(d3.select(this), candidateName);
 
         // Selected State Options HTML
         for (var i = 0; i < stateData.length; i++) {
@@ -105,7 +106,10 @@ var selectState = (function() {
 });
 
 // Updates US Map SVG State to appropriate color based on candidate
-var updateStateColor = (function(d3Obj, candidateName, currentColor) {
+var updateStateColor = (function(d3State, candidateName) {
+    // Get current color of selected state
+    var currentColor = d3State.style('fill');
+
     // Get candidates color
     var candidateColor = defaultColor;
     for (var i = 0; i < candidateData.length; ++i) {
@@ -116,9 +120,9 @@ var updateStateColor = (function(d3Obj, candidateName, currentColor) {
 
     // Change state color to default if same candidate color, otherwise change to new color
     if (currentColor === candidateColor) {
-        d3Obj.style("fill", defaultColor);
+        d3State.style("fill", defaultColor);
     } else {
-        d3Obj.style("fill", candidateColor);
+        d3State.style("fill", candidateColor);
     }
 });
 
@@ -126,11 +130,13 @@ var updateStateColor = (function(d3Obj, candidateName, currentColor) {
 var showStateResults = (function(selectedState) {
     // State description
     $("#state-options-info").text(stateName + " | " + selectedState.type
-        + " | " + selectedState.delegates + " Delegates");
+        + " | " + selectedState.delegates + " Delegates | " + selectedState.date);
 
     // State candidate results
     $("#state-options-rows").html('');
     for (var j = 0; j < candidateData.length; j++) {
+        console.log(candidateData[j].name)
+        console.log(selectedState)
         $("#state-options-rows").append(`
             <div class="row">
                 <div class="col-sm-6">
@@ -139,18 +145,32 @@ var showStateResults = (function(selectedState) {
                             <input type="checkbox" aria-label="..." checked>
                         </span>
                         <span class="input-group-addon" id="addon-cand">` + candidateData[j].name + `</span>
-                        <input type="number" class="form-control" id="perc-vals" aria-label="..." min="0" oninput="validity.valid||(value='');" step=0.1 value="` + selectedState.results[0][candidateData[j].name] + `">
+                        <input type="number" class="form-control" id="perc-` + candidateData[j].id + `" aria-label="..." oninput="validity.valid||(value='');" min="0" max="100" step=0.1 value="` + selectedState.results[0][candidateData[j].name] + `">
                         <span class="input-group-addon" id="addon-perc">%</span>
                         <span class="input-group-addon" id="addon-deleg">_ Delegates</span>
                     </div>
                 </div>
             </div>`
         );
+        // jQuery script, sends updated numbers to function
+        $("#state-options-rows").append(`
+            <script type="text/javascript">
+                $(document).on('input', '#perc-` + candidateData[j].id + `', function() {
+                    var perc = $('#perc-` + candidateData[j].id + `').val();
+                    // updateStateResults(perc, ` + candidateData[j].name + `,` + selectedState + `)
+                })
+            </script>`
+        );
+        // updateStateResults(perc, '` + candidateData[j].name + `',` + selectedState `);
     }
 });
 
-var updateStateResults = (function() {
-
+var updateStateResults = (function(val, candidate, selectedState) {
+    console.log(val)
+    console.log(candidate)
+    console.log(selectedState)
+    // selectedState.results[0][candidate] = val
+    // console.log("State Results: " + JSON.stringify(selectedState))
 });
 
 // Resets Map Back to Default

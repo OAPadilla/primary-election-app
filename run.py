@@ -10,17 +10,20 @@ candidates = [
     {
         "name": "Joe Biden",
         "color": "red",
-        "poll": 51
+        "poll": 51,
+        "id": 1
     },
     {
         "name": "Bernie Sanders",
         "color": "blue",
-        "poll": 24
+        "poll": 24,
+        "id": 2
     },
     {
         "name": "Kamala Harris",
         "color": "purple",
-        "poll": 11
+        "poll": 11,
+        "id": 3
     }
 ]
 # results will start as default taken from candidates, logic needs to be done BE
