@@ -85,7 +85,6 @@ conn.close()
 candidates = query_db('''SELECT * FROM candidates_table ORDER BY poll DESC ''')
 states = query_db('''SELECT * FROM states_table''')
 append_default_results(candidates, states)
-print(states)
 
 if __name__ == '__main__':
     # localhost:5000
