@@ -14,24 +14,6 @@ CANDIDATE_CSV = os.path.join(os.path.dirname(__file__), 'static', 'data', 'dem_c
 DEM_PRIMARY_CSV = os.path.join(os.path.dirname(__file__), 'static', 'data', 'dem_primary.csv')
 
 
-# results will start as default taken from candidates, logic needs to be done BE
-# states = [
-#     {
-#         "name": "Florida",
-#         "initials": "FL",
-#         "delegates": 219,
-#         "super": 29,
-#         "type": "Closed Primary",
-#         "allocation": "Proportional",
-#         "date": "2020-3-17",
-#         "results": [{
-#             "Joe Biden": 51,
-#             "Bernie Sanders": 24,
-#             "Kamala Harris": 11
-#         }]
-#     },
-# ]
-
 @app.route("/")
 @app.route("/index")
 def home():
@@ -60,12 +42,12 @@ def page_not_found(error):
 
 def append_default_results(candidates, states):
     # Collect default poll numbers for candidates
-    result = {}
+    results = {}
     for c in candidates:
-        result[c['name']] = c['poll']
+        results[c['name']] = c['poll']
     # Append result to every state
     for state in states:
-        state['result'] = [result]
+        state['results'] = [results]
 
 
 def get_db():
@@ -103,6 +85,7 @@ conn.close()
 candidates = query_db('''SELECT * FROM candidates_table ORDER BY poll DESC ''')
 states = query_db('''SELECT * FROM states_table''')
 append_default_results(candidates, states)
+print(states)
 
 if __name__ == '__main__':
     # localhost:5000
