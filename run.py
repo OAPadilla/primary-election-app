@@ -1,99 +1,51 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, g
 from flask_bootstrap import Bootstrap
+import os
+import sqlite3
+from sqlite3 import Error
+import pandas as pd
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
 
-# temp data
-# will want to SQL query it in order of poll decreasing so that most popular candidate is on top
-candidates = [
-    {
-        "name": "Joe Biden",
-        "color": "red",
-        "poll": 51,
-        "id": 1
-    },
-    {
-        "name": "Bernie Sanders",
-        "color": "blue",
-        "poll": 24,
-        "id": 2
-    },
-    {
-        "name": "Kamala Harris",
-        "color": "purple",
-        "poll": 11,
-        "id": 3
-    }
-]
-# results will start as default taken from candidates, logic needs to be done BE
-states = [
-    {
-        "name": "Florida",
-        "initial": "FL",
-        "delegates": 219,
-        "super": 29,
-        "type": "Closed Primary",
-        "allocation": "Proportional",
-        "date": "2020-3-17",
-        "results": [{
-            "Joe Biden": 51,
-            "Bernie Sanders": 24,
-            "Kamala Harris": 11
-        }]
-    },
-    {
-        "name": "Iowa",
-        "initial": "IA",
-        "delegates": 41,
-        "super": 8,
-        "type": "Closed Caucus",
-        "allocation": "Proportional",
-        "date": "2020-2-3",
-        "results": [{
-            "Joe Biden": 51,
-            "Bernie Sanders": 24,
-            "Kamala Harris": 11
-        }]
-    },
-    {
-        "name": "New Hampshire",
-        "initial": "NH",
-        "delegates": 24,
-        "super": 9,
-        "type": "Open Primary",
-        "allocation": "Proportional",
-        "date": "2020-2-11",
-        "results": [{
-            "Joe Biden": 51,
-            "Bernie Sanders": 24,
-            "Kamala Harris": 11
-        }]
-    }
-]
 
-# Get from "poll" from candidates, do in BE
-default_values = [51, 24, 11, 6, 4, 2, 1, 1]
+DATABASE = os.path.join(os.path.dirname(__file__), 'database.sqlite3')
+CANDIDATE_CSV = os.path.join(os.path.dirname(__file__), 'static', 'data', 'dem_candidates.csv')
+DEM_PRIMARY_CSV = os.path.join(os.path.dirname(__file__), 'static', 'data', 'dem_primary.csv')
+
+
+# results will start as default taken from candidates, logic needs to be done BE
+# states = [
+#     {
+#         "name": "Florida",
+#         "initials": "FL",
+#         "delegates": 219,
+#         "super": 29,
+#         "type": "Closed Primary",
+#         "allocation": "Proportional",
+#         "date": "2020-3-17",
+#         "results": [{
+#             "Joe Biden": 51,
+#             "Bernie Sanders": 24,
+#             "Kamala Harris": 11
+#         }]
+#     },
+# ]
 
 @app.route("/")
 @app.route("/index")
 def home():
-    return render_template(
-        "home.html",
-        candidates=candidates,
-        states=states,
-        default_values=default_values
-    )
+    return render_template("home.html", candidates=candidates, states=states)
 
 
 @app.route("/api/get_candidate_data", methods=['GET'])
 def get_candidate_data():
-    return jsonify(candidates)
+    return jsonify(candidates), 200
 
 
 @app.route("/api/get_state_data", methods=['GET'])
 def get_state_data():
-    return jsonify(states)
+    return jsonify(states), 200
 
 
 @app.route("/about")
@@ -105,6 +57,53 @@ def about():
 def page_not_found(error):
     return render_template("404.html"), 404
 
-# localhost:5000
-if __name__ == "__main__":
+
+def append_default_results(candidates, states):
+    # Collect default poll numbers for candidates
+    result = {}
+    for c in candidates:
+        result[c['name']] = c['poll']
+    # Append result to every state
+    for state in states:
+        state['result'] = [result]
+
+
+def get_db():
+    try:
+        conn = sqlite3.connect(DATABASE)
+        conn.row_factory = dict_factory
+        return conn
+    except Error as e:
+        print(e)
+
+
+def csv_to_db(conn, csvfile, table_name):
+    df = pd.read_csv(csvfile)
+    df.to_sql(table_name, conn, if_exists='replace')
+
+
+def query_db(query, args=(), one=False):
+    c = get_db().execute(query, args)
+    res = c.fetchall()
+    c.close()
+    return (res[0] if res else None) if one else res
+
+
+def dict_factory(c, row):
+    d = {}
+    for idx, col in enumerate(c.description):
+        d[col[0]] = row[idx]
+    return d
+
+conn = get_db()
+csv_to_db(conn, CANDIDATE_CSV, "candidates_table")
+csv_to_db(conn, DEM_PRIMARY_CSV, "states_table")
+conn.close()
+
+candidates = query_db('''SELECT * FROM candidates_table ORDER BY poll DESC ''')
+states = query_db('''SELECT * FROM states_table''')
+append_default_results(candidates, states)
+
+if __name__ == '__main__':
+    # localhost:5000
     app.run(debug=True)
