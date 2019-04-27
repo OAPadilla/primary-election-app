@@ -1,7 +1,3 @@
-h2 {
-    text-align: center;
-}
-
 .states {
     fill: #bfbfbf;
 }
@@ -18,3 +14,20 @@ h2 {
     stroke-linecap: round;
     pointer-events: none;
 }
+
+h2 {
+    text-align: center;
+}
+
+/* input {
+    display: block;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    width: 100%;
+} */
+
+/* td {
+    margin: 0;
+    padding: 0;
+} */

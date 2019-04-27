@@ -1,19 +1,3 @@
-// document.write("map.js content")
-
-// var data = [30, 86, 168, 281, 303, 435]
-//
-// d3.select(".map-chart")
-//     .selectAll("div")
-//     .data(data)
-//         .enter()
-//         .append("div")
-//         .style("width", function(d) { return d + "px"; })
-//         .text(function(d) { return d; });
-
-console.log(stateData)
-stateData[0].results[0][candidateData[1].name] = 99
-console.log(stateData)
-
 const defaultColor = $('.states').css("fill");
 var stateName;
 
@@ -77,10 +61,8 @@ var selectState = (function() {
         for (var i = 0; i < stateData.length; i++) {
             if (stateData[i].name === stateName) {
                 // Update State Data results with chosen color candidate as first
-                stateData[i].results[0][candidateName] = 51
-                //FIXME: Add management of numbers for rest of candidates so its automatic
-
-                // State description and candidate results
+                updateStateResults(51, candidateName, stateData[i])
+                // Display state description and candidate results
                 showStateResults(stateData[i]);
                 break;
             }
@@ -133,44 +115,34 @@ var showStateResults = (function(selectedState) {
         + " | " + selectedState.delegates + " Delegates | " + selectedState.date);
 
     // State candidate results
-    $("#state-options-rows").html('');
+    $(".state-options-rows").html('');
     for (var j = 0; j < candidateData.length; j++) {
-        console.log(candidateData[j].name)
-        console.log(selectedState)
-        $("#state-options-rows").append(`
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <input type="checkbox" aria-label="..." checked>
-                        </span>
-                        <span class="input-group-addon" id="addon-cand">` + candidateData[j].name + `</span>
-                        <input type="number" class="form-control" id="perc-` + candidateData[j].id + `" aria-label="..." oninput="validity.valid||(value='');" min="0" max="100" step=0.1 value="` + selectedState.results[0][candidateData[j].name] + `">
-                        <span class="input-group-addon" id="addon-perc">%</span>
-                        <span class="input-group-addon" id="addon-deleg">_ Delegates</span>
-                    </div>
-                </div>
-            </div>`
-        );
-        // jQuery script, sends updated numbers to function
-        $("#state-options-rows").append(`
-            <script type="text/javascript">
-                $(document).on('input', '#perc-` + candidateData[j].id + `', function() {
-                    var perc = $('#perc-` + candidateData[j].id + `').val();
-                    // updateStateResults(perc, ` + candidateData[j].name + `,` + selectedState + `)
-                })
-            </script>`
-        );
-        // updateStateResults(perc, '` + candidateData[j].name + `',` + selectedState `);
+        // Table rows html
+        $(".state-options-rows").append(`
+            <tr>
+               <td><input type="checkbox" aria-label="..." checked></td>
+               <td id="addon-cand">` + candidateData[j].name  + `</td>
+               <td><input type="number" class="form-control" id="perc-` + candidateData[j].index + `" aria-label="..."
+                   name="` + candidateData[j].name + `" oninput="validity.valid||(value='');"
+                   min="0" max="100" step=0.1 value="` + selectedState.results[0][candidateData[j].name] + `"></td>
+               <td id="addon-perc">%</td>
+               <td id="addon-deleg">_ Delegates</td>
+            </tr>
+        `);
+        // Event Listener for when a value is updated
+        document.getElementById("perc-" + candidateData[j].index).addEventListener("change", function() {
+            var val = this.value
+            var name = this.name
+            updateStateResults(val, name, selectedState)
+        })
     }
 });
 
+// Updates State Data with modified results
 var updateStateResults = (function(val, candidate, selectedState) {
-    console.log(val)
-    console.log(candidate)
-    console.log(selectedState)
-    // selectedState.results[0][candidate] = val
-    // console.log("State Results: " + JSON.stringify(selectedState))
+    selectedState.results[0][candidate] = val
+    console.log("State Results: " + JSON.stringify(selectedState))
+    //FIXME: Add management of numbers for rest of candidates so its automatic
 });
 
 // Resets Map Back to Default
