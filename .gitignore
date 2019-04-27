@@ -1,6 +1,4 @@
 .idea/
 venv/
 docs/
-state.py
-data/
 database.sqlite3

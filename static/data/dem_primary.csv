@@ -1,0 +1,61 @@
+name,initials,type,allocation,delegates,super,date
+Alabama,AL,Open Primary,Proportional,52,9,2020-03-03
+Alaska,AK,Closed Primary,Proportional,14,4,2020-04-04
+Arizona,AZ,Closed Primary,Proportional,67,11,2020-03-17
+Arkansas,AR,Open Primary,Proportional,31,5,2020-03-03
+California,CA,Modified Primary,Proportional,416,79,2020-03-03
+Colorado,CO,Modified Primary,Proportional,67,13,2020-03-03
+Connecticut,CT,Closed Primary,Proportional,49,15,2020-04-28
+Delaware,DE,Closed Primary,Proportional,17,11,2020-04-28
+Florida,FL,Closed Primary,Proportional,219,29,2020-03-17
+Georgia,GA,Open Primary,Proportional,105,15,2020-03-03
+Hawaii,HI,Closed Primary,Proportional,22,9,2020-03-04
+Idaho,ID,Closed Primary,Proportional,20,5,2020-03-10
+Illinois,IL,Open Primary,Proportional,155,29,2020-03-17
+Indiana,IN,Open Primary,Proportional,70,7,2020-05-05
+Iowa,IA,Closed Caucus,Proportional,41,8,2020-02-03
+Kansas,KS,Closed Caucus,Proportional,33,6,2020-03-07
+Kentucky,KY,Closed Primary,Proportional,46,6,2020-05-19
+Louisiana,LA,Closed Primary,Proportional,50,7,2020-03-07
+Maine,ME,Closed Caucus,Proportional,24,8,2020-03-08
+Maryland,MD,Closed Primary,Proportional,79,23,2020-04-28
+Massachusetts,MA,Modified Primary,Proportional,91,23,2020-03-03
+Michigan,MI,Open Primary,Proportional,125,22,2020-03-10
+Minnesota,MN,Closed Primary,Proportional,75,17,2020-03-03
+Mississippi,MS,Open Primary,Proportional,36,5,2020-03-10
+Missouri,MO,Open Primary,Proportional,68,10,2020-03-10
+Montana,MT,Open Primary,Proportional,16,6,2020-06-02
+Nebraska,NE,Modified Primary,Proportional,25,4,2020-05-12
+Nevada,NV,Closed Caucus,Proportional,36,12,2020-02-22
+New Hampshire,NH,Modified Primary,Proportional,24,9,2020-02-11
+New Jersey,NJ,Modified Primary,Proportional,107,21,2020-06-02
+New Mexico,NM,Closed Primary,Proportional,29,11,2020-06-02
+New York,NY,Closed Primary,Proportional,224,46,2020-04-28
+North Carolina,NC,Modified Primary,Proportional,110,12,2020-03-03
+North Dakota,ND,Open Caucus,Proportional,14,4,2020-03-10
+Ohio,OH,Modified Primary,Proportional,136,17,2020-03-10
+Oklahoma,OK,Modified Primary,Proportional,37,5,2020-03-03
+Oregon,OR,Closed Primary,Proportional,52,14,2020-05-19
+Pennsylvania,PA,Closed Primary,Proportional,153,23,2020-04-28
+Rhode Island,RI,Modified Primary,Proportional,21,9,2020-04-28
+South Carolina,SC,Open Primary,Proportional,54,9,2020-02-29
+South Dakota,SD,Modified Primary,Proportional,14,5,2020-06-02
+Tennessee,TN,Open Primary,Proportional,64,9,2020-03-03
+Texas,TX,Closed Primary,Proportional,228,34,2020-03-03
+Utah,UT,Closed Primary,Proportional,29,6,2020-03-03
+Vermont,VT,Open Primary,Proportional,16,7,2020--03-03
+Virginia,VA,Open Primary,Proportional,99,25,2020-03-03
+Washington,WA,Closed Primary,Proportional,89,18,2020-03-10
+West Virginia,WV,Modified Primary,Proportional,24,6,2020-05-12
+Wisconsin,WI,Open Primary,Proportional,77,13,2020-04-07
+Wyoming,WY,Closed Caucus,Proportional,13,4,2020-03-03
+American Samoa,AS,Open Caucus,Proportional,6,5,2020-03-03
+District of Columbia,DC,Closed Primary,Proportional,17,26,2020-05-16
+Federated States of Micronesia,FM,,Proportional,,,
+Guam,GU,Closed Caucus,Proportional,6,5,2020-05-02
+Marshall Islands,MH,,Proportional,,,
+Northern Mariana Islands,MP,Closed Caucus,Proportional,6,5,2020-03-14
+Palau,PW,,Proportional,,,
+Puerto Rico,PR,Open Primary,Proportional,51,8,2020-06-07
+Virgin Islands,VI,Closed Caucus,Proportional,6,5,2020-06-06
+Democrats Abroad,DA,Open Caucus,Proportional,13,4,2020-03-10
