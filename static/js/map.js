@@ -1,6 +1,5 @@
-const defaultColor = $('.states').css("fill");
+var defaultColor;
 var stateName;
-
 var svg = d3.select("svg");
 var path = d3.geoPath();
 
@@ -43,6 +42,7 @@ d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
             return a !== b;
         })));
 
+    defaultColor = $('.states').css("fill");
 });
 
 // Clicking On States Actions
@@ -89,8 +89,8 @@ var selectState = (function() {
 
 // Updates US Map SVG State to appropriate color based on candidate
 var updateStateColor = (function(d3State, candidateName) {
-    // Get current color of selected state
-    var currentColor = d3State.style('fill');
+    // Get current color of selected state, converted to hex
+    var currentColor =  rgba2hex(d3State.style('fill'));
 
     // Get candidates color
     var candidateColor = defaultColor;
@@ -150,3 +150,15 @@ var resetMap = (function() {
     svg.selectAll("*").style("fill", defaultColor);
     // Change all state results back to default (from candidates[0].poll)
 });
+
+// Source: StackOverflow, by user Kaiido. Modified slightly
+function rgba2hex(orig) {
+    var isPercent,
+        rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i),
+        alpha = (rgb && rgb[4] || "").trim(),
+        hex = rgb ?
+        (rgb[1] | 1 << 8).toString(16).slice(1) +
+        (rgb[2] | 1 << 8).toString(16).slice(1) +
+        (rgb[3] | 1 << 8).toString(16).slice(1) : orig;
+    return '#' + hex;
+}
