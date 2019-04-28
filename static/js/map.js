@@ -124,19 +124,35 @@ var showStateResults = (function(selectedState) {
                    name="` + candidateData[j].name + `" oninput="validity.valid||(value='');"
                    min="0" max="100" step=0.1 value="` + selectedState.results[0][candidateData[j].name] + `"></td>
                <td id="addon-perc">%</td>
-               <td id="addon-del">_ Delegates</td>
+               <td id="addon-del" name="` + candidateData[j].name + `"></td>
             </tr>
         `);
+
+        // Gets state's candidate delegate counts
+        showDelegates(selectedState);
+
         // Event Listener for when a value is updated
-        document.getElementById("perc-" + candidateData[j].index).addEventListener("change", function() {
+        $("#perc-" + candidateData[j].index).on("change", function() {
             var val = this.value;
             var name = this.name;
             updateStateResults(val, name, selectedState);
+            showDelegates(selectedState);
         });
-    }
 
-    calculateDelegates(selectedState)
+    }
 });
+
+// Calculates and updates HTML with candidate delegate count for states
+var showDelegates = (function(selectedState) {
+    // Calculate delegate count for current present percentages
+    var delegates = calculateDelegates(selectedState);
+
+    // Update HTML for candidate delegate counts
+    $(".state-options-rows tr").children("td#addon-del").text("")
+    $.each(delegates, function(index, val) {
+        $(".state-options-rows tr").children("td[name='" + index + "']").text(val + " delegates")
+    });
+})
 
 // Updates State Data with modified results
 var updateStateResults = (function(val, candidate, selectedState) {
