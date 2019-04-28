@@ -69,8 +69,6 @@ var selectState = (function() {
         }
         // Set selected candidate to 51%, and change the rest to defaults
 
-        // d3.select(".perc-vals").property("value") = d3.selectcandidateName.
-
         // calculate delegate count and update it
 
     // Else, user selected state with Custom
@@ -119,29 +117,32 @@ var showStateResults = (function(selectedState) {
     for (var j = 0; j < candidateData.length; j++) {
         // Table rows html
         $(".state-options-rows").append(`
-            <tr>
+            <tr id="` + candidateData[j].name + `">
                <td><input type="checkbox" aria-label="..." checked></td>
                <td id="addon-cand">` + candidateData[j].name  + `</td>
                <td><input type="number" class="form-control" id="perc-` + candidateData[j].index + `" aria-label="..."
                    name="` + candidateData[j].name + `" oninput="validity.valid||(value='');"
                    min="0" max="100" step=0.1 value="` + selectedState.results[0][candidateData[j].name] + `"></td>
                <td id="addon-perc">%</td>
-               <td id="addon-deleg">_ Delegates</td>
+               <td id="addon-del">_ Delegates</td>
             </tr>
         `);
         // Event Listener for when a value is updated
         document.getElementById("perc-" + candidateData[j].index).addEventListener("change", function() {
-            var val = this.value
-            var name = this.name
-            updateStateResults(val, name, selectedState)
-        })
+            var val = this.value;
+            var name = this.name;
+            updateStateResults(val, name, selectedState);
+        });
     }
+
+    calculateDelegates(selectedState)
 });
 
 // Updates State Data with modified results
 var updateStateResults = (function(val, candidate, selectedState) {
-    selectedState.results[0][candidate] = val
-    console.log("State Results: " + JSON.stringify(selectedState))
+    selectedState.results[0][candidate] = parseFloat(val);
+    console.log("State Results: " + JSON.stringify(selectedState));
+
     //FIXME: Add management of numbers for rest of candidates so its automatic
 });
 
@@ -149,6 +150,45 @@ var updateStateResults = (function(val, candidate, selectedState) {
 var resetMap = (function() {
     svg.selectAll("*").style("fill", defaultColor);
     // Change all state results back to default (from candidates[0].poll)
+});
+
+// Democratic delegate allocation calculation
+var calculateDelegates = (function(selectedState) {
+    var delegates = {};  // {name: delegates}
+    var total = 0;      // total percentage over 15
+
+    // Get results of candidates in selected state with >=15%
+    for (var key in selectedState.results[0]) {
+        if (selectedState.results[0][key] >= 15) {
+            delegates[key] = selectedState.results[0][key];
+            total += selectedState.results[0][key];
+        }
+    }
+
+    var fractalRemainders = {};       // {name: fractal remainder delegates}
+    var leftoverDelegates = selectedState.delegates;  // total delegates available
+
+    // Retabulate percentages and calculate number of delegates
+    for (var key in delegates) {
+        x = (delegates[key]/total) * selectedState.delegates;
+        delegates[key] = Math.floor(x);
+        leftoverDelegates -= delegates[key];
+        fractalRemainders[key] = x - delegates[key];
+    }
+
+    // Allocate extra delegates to max fractal remainders in decreasing order
+    var keys = Object.keys(fractalRemainders);
+    keys.sort(function(a,b) {           // Sort array of keys based on values
+        return fractalRemainders[b] - fractalRemainders[a];
+    })
+    for (var k in keys) {
+        if (leftoverDelegates > 0) {
+            delegates[keys[k]] += 1;    // Allocate extra delegate to candidate
+            leftoverDelegates -= 1;     // Remove 1 from the leftover delegates
+        }
+    }
+
+    return delegates;
 });
 
 // Source: StackOverflow, by user Kaiido. Modified slightly
