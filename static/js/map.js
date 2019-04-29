@@ -55,29 +55,25 @@ var selectState = (function() {
     // If user selected state with candidate chosen
     if (candidateName !== "Custom") {
         // Update state color depending on candidate
-        updateStateColor(d3.select(this), candidateName);
+        updateStateColorByClick(candidateName, d3.select(this));
 
         // Selected State Options HTML
         for (var i = 0; i < stateData.length; i++) {
             if (stateData[i].name === stateName) {
                 // Update State Data results with chosen color candidate as first
-                updateStateResultsByClick(51, candidateName, stateData[i])
+                updateStateResultsByClick(candidateName, stateData[i], d3.select(this));
                 // Display state description and candidate results
-                showStateResults(stateData[i]);
+                showStateResults(stateData[i], d3.select(this));
                 break;
             }
         }
-        // Set selected candidate to 51%, and change the rest to defaults
-
-        // calculate delegate count and update it
-
     // Else, user selected state with Custom
     } else {
         // Selected State Options HTML
         for (var i = 0; i < stateData.length; i++) {
             if (stateData[i].name === stateName) {
                 // State description and candidate results
-                showStateResults(stateData[i]);
+                showStateResults(stateData[i], d3.select(this));
                 break;
             }
         }
@@ -85,8 +81,8 @@ var selectState = (function() {
     }
 });
 
-// Updates US Map SVG State to appropriate color based on candidate
-var updateStateColor = (function(d3State, candidateName) {
+// Updates US Map SVG State to appropriate color based on candidate chosen
+var updateStateColorByClick = (function(candidateName, d3State) {
     // Get current color of selected state, converted to hex
     var currentColor =  rgba2hex(d3State.style('fill'));
 
@@ -106,8 +102,22 @@ var updateStateColor = (function(d3State, candidateName) {
     }
 });
 
+// Updates US Map SVG State to appropriate color based on candidate
+var updateStateColor = (function(candidateName, selectedState, d3State) {
+    // Get candidates color
+    var candidateColor = defaultColor;
+    for (var i = 0; i < candidateData.length; ++i) {
+        if (candidateData[i].name === candidateName) {
+            candidateColor = candidateData[i].color;
+        }
+    }
+    
+    // Update color of selected state too apropriate candidates color
+    d3State.style("fill", candidateColor);
+})
+
 // Update HTML for State Options that contains State description and results
-var showStateResults = (function(selectedState) {
+var showStateResults = (function(selectedState, d3State) {
     // Get Total Percentage points available to be assigned in state Results
     var availablePercPoints = Math.round(10*(100 - getTotalAssignedPercentages(selectedState)))/10;
 
@@ -141,8 +151,9 @@ var showStateResults = (function(selectedState) {
         $("#perc-" + candidateData[j].index).on("change", function() {
             var val = this.value;
             var name = this.name;
-            updateStateResults(val, name, selectedState);
+            updateStateResults(val, name, selectedState, d3State);
             showDelegates(selectedState);
+            //FIXME: Update color
         });
 
     }
@@ -161,7 +172,7 @@ var showDelegates = (function(selectedState) {
 })
 
 // Updates State Data with modified results, including managing 100% total
-var updateStateResults = (function(val, candidate, selectedState) {
+var updateStateResults = (function(val, candidate, selectedState, d3State) {
     // Get available percentage points to assign a candidate
     var bucket = Math.round(10*(100 - getTotalAssignedPercentages(selectedState)))/10;
 
@@ -183,25 +194,36 @@ var updateStateResults = (function(val, candidate, selectedState) {
         var max = Math.round(10*(value + bucket))/10;
         $('input[name="'+key+'"').attr('max', max);
     });
+
+    // Update color of state to top candidate
+    var topCandidate = getStateTopCandidate(candidate, selectedState);
+    updateStateColor(topCandidate, selectedState, d3State);
 });
 
-var updateStateResultsByClick = (function(val, candidate, selectedState) {
+// Updates State Data with results when clicked with candidate choice
+var updateStateResultsByClick = (function(candidate, selectedState, d3State) {
     var selectedCandidateVal = selectedState.results[0][candidate];
 
     // Find candidate with greatest result in state
+    var topCandidate = getStateTopCandidate(candidate, selectedState);
+    var topCandidateVal = selectedState.results[0][topCandidate];
+
+    // Update top candidate with selected candidates val
+    updateStateResults(selectedCandidateVal, topCandidate, selectedState, d3State);
+    // Update selected candidate with top val
+    updateStateResults(topCandidateVal, candidate, selectedState, d3State);
+});
+
+// Gets current top candidate in state's results
+var getStateTopCandidate = (function(candidate, selectedState) {
     var topCandidate = candidate;
     for (var c in selectedState.results[0]) {
         if (selectedState.results[0][c] > selectedState.results[0][topCandidate]) {
             topCandidate = c;
         }
     }
-    var topCandidateVal = selectedState.results[0][topCandidate];
-
-    // Update top candidate with selected candidates val
-    updateStateResults(selectedCandidateVal, topCandidate, selectedState)
-    // Update selected candidate with top val
-    updateStateResults(topCandidateVal, candidate, selectedState)
-})
+    return topCandidate;
+});
 
 // Resets Map Back to Default
 var resetMap = (function() {
