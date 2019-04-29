@@ -108,9 +108,15 @@ var updateStateColor = (function(d3State, candidateName) {
 
 // Update HTML for State Options that contains State description and results
 var showStateResults = (function(selectedState) {
+    // Get Total Percentage points available to be assigned in state Results
+    var availablePercPoints = Math.round(10*(100 - getTotalAssignedPercentages(selectedState)))/10;
+
     // State description
     $("#state-options-info").text(stateName + " | " + selectedState.type
         + " | " + selectedState.delegates + " Delegates | " + selectedState.date);
+
+    // Available Percentage Points to be Assigned
+    $(".delegates-available").text("Available Percentage Points to Assign: " + availablePercPoints)
 
     // State candidate results
     $(".state-options-rows").html('');
@@ -122,7 +128,7 @@ var showStateResults = (function(selectedState) {
                <td id="addon-cand">` + candidateData[j].name  + `</td>
                <td><input type="number" class="form-control" id="perc-` + candidateData[j].index + `" aria-label="..."
                    name="` + candidateData[j].name + `" oninput="validity.valid||(value='');"
-                   min="0" max="100" step=0.1 value="` + selectedState.results[0][candidateData[j].name] + `"></td>
+                   min="0" max="` + (selectedState.results[0][candidateData[j].name] + availablePercPoints) + `" step=0.1 value="` + selectedState.results[0][candidateData[j].name] + `"></td>
                <td id="addon-perc">%</td>
                <td id="addon-del" name="` + candidateData[j].name + `"></td>
             </tr>
@@ -156,32 +162,48 @@ var showDelegates = (function(selectedState) {
 
 // Updates State Data with modified results, including managing 100% total
 var updateStateResults = (function(val, candidate, selectedState) {
+    // Get available percentage points to assign a candidate
+    var bucket = Math.round(10*(100 - getTotalAssignedPercentages(selectedState)))/10;
+
     // Get difference between old and new updated result
-    var diff = selectedState.results[0][candidate] - parseFloat(val)
+    var diff = parseFloat(val) - selectedState.results[0][candidate];
+
+    // If diff is negative then points are added to bucket
+    bucket -= diff
+    bucket = Math.round(10*(bucket))/10;
+
+    // Update HTML for available percentage Points
+    $(".delegates-available").text("Available Percentage Points to Assign: " + bucket);
 
     // Update candidate result
     selectedState.results[0][candidate] = parseFloat(val);
 
-    // Sort candidate results in ascending order for easier management
-    var keys = Object.keys(selectedState.results[0]);
-    keys.sort(function(a,b) {           // Sort array of keys based on values
-        return selectedState.results[0][a] - selectedState.results[0][b];
-    })
-    // Alter the other candidate's results to keep total percantage = 100 %
-    // Loop through sorted keys of references to candidates
-    for (var c in keys) {
-        // Modify first candidate with above 0 result
-        if (selectedState.results[0][keys[c]] > 0 && keys[c] !== candidate) {
-            // Re-assign percentages among lower candidates
-            if (Math.abs(diff) < selectedState.results[0][keys[c]]) {
-                selectedState.results[0][keys[c]] = Math.round(10*(selectedState.results[0][keys[c]] + diff))/10;
-                break;
-            } else {
-                diff = selectedState.results[0][keys[c]] + diff;
-                selectedState.results[0][keys[c]] = 0
-            }
-        }
-    }
+    // Update max values for a input rows to include available percentages
+    $.each(selectedState.results[0], function(key, value) {
+        var max = Math.round(10*(value + bucket))/10;
+        $('input[name="'+key+'"').attr('max', max);
+    });
+
+    // // Sort candidate results in ascending order for easier management
+    // var keys = Object.keys(selectedState.results[0]);
+    // keys.sort(function(a,b) {           // Sort array of keys based on values
+    //     return selectedState.results[0][a] - selectedState.results[0][b];
+    // })
+    // // Alter the other candidate's results to keep total percantage = 100 %
+    // // Loop through sorted keys of references to candidates
+    // for (var c in keys) {
+    //     // Modify first candidate with above 0 result
+    //     if (selectedState.results[0][keys[c]] > 0 && keys[c] !== candidate) {
+    //         // Re-assign percentages among lower candidates
+    //         if (Math.abs(diff) <= selectedState.results[0][keys[c]]) {
+    //             selectedState.results[0][keys[c]] = Math.round(10*(selectedState.results[0][keys[c]] + diff))/10;
+    //             break;
+    //         } else {
+    //             diff = selectedState.results[0][keys[c]] + diff;
+    //             selectedState.results[0][keys[c]] = 0
+    //         }
+    //     }
+    // }
     console.log("State Results: " + JSON.stringify(selectedState));
 });
 
@@ -190,6 +212,15 @@ var resetMap = (function() {
     svg.selectAll("*").style("fill", defaultColor);
     //FIXME: Change all state results back to default (from candidates[0].poll)
 });
+
+// Counts total spent percentage points in a state's results
+var getTotalAssignedPercentages = (function(selectedState) {
+    var result = 0;
+    for (var key in selectedState.results[0]) {
+        result += selectedState.results[0][key];
+    }
+    return result;
+})
 
 // Democratic delegate allocation calculation
 var calculateDelegates = (function(selectedState) {
