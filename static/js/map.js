@@ -61,7 +61,7 @@ var selectState = (function() {
         for (var i = 0; i < stateData.length; i++) {
             if (stateData[i].name === stateName) {
                 // Update State Data results with chosen color candidate as first
-                updateStateResults(51, candidateName, stateData[i])
+                updateStateResultsByClick(51, candidateName, stateData[i])
                 // Display state description and candidate results
                 showStateResults(stateData[i]);
                 break;
@@ -183,29 +183,25 @@ var updateStateResults = (function(val, candidate, selectedState) {
         var max = Math.round(10*(value + bucket))/10;
         $('input[name="'+key+'"').attr('max', max);
     });
-
-    // // Sort candidate results in ascending order for easier management
-    // var keys = Object.keys(selectedState.results[0]);
-    // keys.sort(function(a,b) {           // Sort array of keys based on values
-    //     return selectedState.results[0][a] - selectedState.results[0][b];
-    // })
-    // // Alter the other candidate's results to keep total percantage = 100 %
-    // // Loop through sorted keys of references to candidates
-    // for (var c in keys) {
-    //     // Modify first candidate with above 0 result
-    //     if (selectedState.results[0][keys[c]] > 0 && keys[c] !== candidate) {
-    //         // Re-assign percentages among lower candidates
-    //         if (Math.abs(diff) <= selectedState.results[0][keys[c]]) {
-    //             selectedState.results[0][keys[c]] = Math.round(10*(selectedState.results[0][keys[c]] + diff))/10;
-    //             break;
-    //         } else {
-    //             diff = selectedState.results[0][keys[c]] + diff;
-    //             selectedState.results[0][keys[c]] = 0
-    //         }
-    //     }
-    // }
-    console.log("State Results: " + JSON.stringify(selectedState));
 });
+
+var updateStateResultsByClick = (function(val, candidate, selectedState) {
+    var selectedCandidateVal = selectedState.results[0][candidate];
+
+    // Find candidate with greatest result in state
+    var topCandidate = candidate;
+    for (var c in selectedState.results[0]) {
+        if (selectedState.results[0][c] > selectedState.results[0][topCandidate]) {
+            topCandidate = c;
+        }
+    }
+    var topCandidateVal = selectedState.results[0][topCandidate];
+
+    // Update top candidate with selected candidates val
+    updateStateResults(selectedCandidateVal, topCandidate, selectedState)
+    // Update selected candidate with top val
+    updateStateResults(topCandidateVal, candidate, selectedState)
+})
 
 // Resets Map Back to Default
 var resetMap = (function() {
