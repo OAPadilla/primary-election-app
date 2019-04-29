@@ -150,22 +150,45 @@ var showDelegates = (function(selectedState) {
     // Update HTML for candidate delegate counts
     $(".state-options-rows tr").children("td#addon-del").text("")
     $.each(delegates, function(index, val) {
-        $(".state-options-rows tr").children("td[name='" + index + "']").text(val + " delegates")
+        $(".state-options-rows tr").children('td[name="' + index + '"]').text(val + " delegates")
     });
 })
 
-// Updates State Data with modified results
+// Updates State Data with modified results, including managing 100% total
 var updateStateResults = (function(val, candidate, selectedState) {
-    selectedState.results[0][candidate] = parseFloat(val);
-    console.log("State Results: " + JSON.stringify(selectedState));
+    // Get difference between old and new updated result
+    var diff = selectedState.results[0][candidate] - parseFloat(val)
 
-    //FIXME: Add management of numbers for rest of candidates so its automatic
+    // Update candidate result
+    selectedState.results[0][candidate] = parseFloat(val);
+
+    // Sort candidate results in ascending order for easier management
+    var keys = Object.keys(selectedState.results[0]);
+    keys.sort(function(a,b) {           // Sort array of keys based on values
+        return selectedState.results[0][a] - selectedState.results[0][b];
+    })
+    // Alter the other candidate's results to keep total percantage = 100 %
+    // Loop through sorted keys of references to candidates
+    for (var c in keys) {
+        // Modify first candidate with above 0 result
+        if (selectedState.results[0][keys[c]] > 0 && keys[c] !== candidate) {
+            // Re-assign percentages among lower candidates
+            if (Math.abs(diff) < selectedState.results[0][keys[c]]) {
+                selectedState.results[0][keys[c]] = Math.round(10*(selectedState.results[0][keys[c]] + diff))/10;
+                break;
+            } else {
+                diff = selectedState.results[0][keys[c]] + diff;
+                selectedState.results[0][keys[c]] = 0
+            }
+        }
+    }
+    console.log("State Results: " + JSON.stringify(selectedState));
 });
 
 // Resets Map Back to Default
 var resetMap = (function() {
     svg.selectAll("*").style("fill", defaultColor);
-    // Change all state results back to default (from candidates[0].poll)
+    //FIXME: Change all state results back to default (from candidates[0].poll)
 });
 
 // Democratic delegate allocation calculation
