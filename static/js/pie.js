@@ -1,7 +1,7 @@
-
-// var data = [{"name": "Joe Biden", "color": "#009933", "poll": 51},
-//             {"name": "Bernie Sanders", "color": "#6699ff", "poll": 24},
-//             {"name": "Kamala Harris", "color": "#ff9966", "poll": 11}];
+//
+// var data = [{"name": "Joe Biden", "color": "#009933", "poll": 51, "delegates": 100},
+//             {"name": "Bernie Sanders", "color": "#6699ff", "poll": 24, "delegates": 50},
+//             {"name": "Kamala Harris", "color": "#ff9966", "poll": 11, "delegates": 25}];
 
 //FIXME: Append total delegate counts to data holding candidateData
 
@@ -46,12 +46,11 @@ var g = pieSVG.selectAll("arc")
     .attr("class", "arc")
 
 // Create center candidate data in donut hole
-d3.select("#pie-chart").select("svg")
+var holeText = d3.select("#pie-chart").select("svg")
     .append("g")
     .append("text")
     .attr("class", "candidate-text")
     .attr("transform", "translate(" + (width / 2) + "," + (height / 2) + ")")
-    .text(``)
     .attr('text-anchor', 'middle')
 
 // Add color/style with variables of data
@@ -63,13 +62,25 @@ g.append("path")
     .style("opacity", opacity)
     .on("mouseover", function(d) {
         d3.select(this).style("opacity", opacityHover);
+
         // Display candidate, percentage, delegates won in donut hole
-        d3.select(".candidate-text")
-            .text(`${d.data.name} (${d.data.poll})`)
+        holeText.append("tspan")
+            .text(d.data.name + " (" + d.data.poll + "%)")
+            .attr("class", "name")
+            .attr("x", 0)
+            .attr("dx", 0)
+            .attr("dy", 0)
+
+        holeText.append("tspan")
+            .text(d.data.delegates + " Delegates")
+            .attr("class", "del")
+            .attr("x", 0)
+            .attr("dx", 0)
+            .attr("dy", 20)
     })
     .on("mouseout", function(d) {
         d3.select(this).style("opacity", opacity)
-        // Clear displayed candidate in donut hole
+        // Clear displayed info in donut hole
         d3.select(".candidate-text")
             .text('')
     })
