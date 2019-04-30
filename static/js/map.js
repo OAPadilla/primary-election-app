@@ -152,7 +152,7 @@ var showStateResults = (function(selectedState, d3State) {
             var name = this.name;
             updateStateResults(val, name, selectedState, d3State);
             showDelegates(selectedState);
-            //FIXME: Update color
+            //FIXME Add/save delegates to candidateData
         });
 
     }

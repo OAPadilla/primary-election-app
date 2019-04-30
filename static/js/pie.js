@@ -1,14 +1,14 @@
 //
-var data = [{"name": "Joe Biden", "color": "#009933", "poll": 51, "delegates": 1868},
-            {"name": "Bernie Sanders", "color": "#6699ff", "poll": 24, "delegates": 879},
-            {"name": "Kamala Harris", "color": "#ff9966", "poll": 11, "delegates": 440}];
+// var data = [{"name": "Joe Biden", "color": "#009933", "poll": 51, "delegates": 1868},
+//             {"name": "Bernie Sanders", "color": "#6699ff", "poll": 24, "delegates": 879},
+//             {"name": "Kamala Harris", "color": "#ff9966", "poll": 11, "delegates": 440}];
 
-//FIXME: Append total delegate counts to data holding candidateData
+// FIXME: Waiting for candidateData to have a delegates key-value
 // Candidate data for pie chart
 console.log(totalDelegates)
 console.log(candidateData)
 console.log(stateData)
-// var data = calculateTotalDelegates(candidateData);
+var data = candidateData;
 console.log(data);
 
 // Set size and attributes of pie chart
@@ -100,20 +100,20 @@ g.append("text")
         }
     })
 
-// Append national delegate results for all candidates
-function calculateTotalDelegates(candidateData) {
-    var results = {};
-
-    for (var c in candidateData) {
-        candidateName = candidateData[c].name
-        for (var s in stateData) {
-
-            console.log(stateData[s].results[0][candidateData[c]])
-            results[candidateName] = stateData[s].results[0][candidateData[c]]
-        }
-    }
-
-    // candidateData[c][]
-
-    return results
-}
+// // Append national delegate results for all candidates
+// function getCandidatesTotalDelegates(candidateData) {
+//     var results = 0;
+//
+//
+//
+//     // for (var c in candidateData) {
+//     //     candidateName = candidateData[c].name
+//     //     for (var s in stateData) {
+//     //         console.log(stateData[s].results[0][candidateName])
+//     //         // console.log(stateData[s].results[0][candidateData[c]])
+//     //         // results[candidateName] = stateData[s].results[0][candidateData[c]]
+//     //     }
+//     // }
+//
+//     return results
+// }
