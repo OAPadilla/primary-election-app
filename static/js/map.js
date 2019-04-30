@@ -111,7 +111,7 @@ var updateStateColor = (function(candidateName, selectedState, d3State) {
             candidateColor = candidateData[i].color;
         }
     }
-    
+
     // Update color of selected state too apropriate candidates color
     d3State.style("fill", candidateColor);
 })
@@ -134,7 +134,6 @@ var showStateResults = (function(selectedState, d3State) {
         // Table rows html
         $(".state-options-rows").append(`
             <tr id="` + candidateData[j].name + `">
-               <td><input type="checkbox" aria-label="..." checked></td>
                <td id="addon-cand">` + candidateData[j].name  + `</td>
                <td><input type="number" class="form-control" id="perc-` + candidateData[j].index + `" aria-label="..."
                    name="` + candidateData[j].name + `" oninput="validity.valid||(value='');"
