@@ -1,12 +1,15 @@
 //
-// var data = [{"name": "Joe Biden", "color": "#009933", "poll": 51, "delegates": 100},
-//             {"name": "Bernie Sanders", "color": "#6699ff", "poll": 24, "delegates": 50},
-//             {"name": "Kamala Harris", "color": "#ff9966", "poll": 11, "delegates": 25}];
+var data = [{"name": "Joe Biden", "color": "#009933", "poll": 51, "delegates": 1868},
+            {"name": "Bernie Sanders", "color": "#6699ff", "poll": 24, "delegates": 879},
+            {"name": "Kamala Harris", "color": "#ff9966", "poll": 11, "delegates": 440}];
 
 //FIXME: Append total delegate counts to data holding candidateData
-
 // Candidate data for pie chart
-var data = candidateData
+console.log(totalDelegates)
+console.log(candidateData)
+console.log(stateData)
+// var data = calculateTotalDelegates(candidateData);
+console.log(data);
 
 // Set size and attributes of pie chart
 var width = 640;
@@ -18,7 +21,7 @@ var opacityHover = 0.7;
 // Create pie shape holding data
 var pie = d3.pie()
     .value(function(d) {
-        return d.poll;
+        return Math.round(100*(d.delegates/totalDelegates));
     })(data);
 
 // Arc of pie circle
@@ -43,7 +46,7 @@ var g = pieSVG.selectAll("arc")
     .data(pie)
     .enter()
     .append("g")
-    .attr("class", "arc")
+    .attr("class", "arc");
 
 // Create center candidate data in donut hole
 var holeText = d3.select("#pie-chart").select("svg")
@@ -51,7 +54,7 @@ var holeText = d3.select("#pie-chart").select("svg")
     .append("text")
     .attr("class", "candidate-text")
     .attr("transform", "translate(" + (width / 2) + "," + (height / 2) + ")")
-    .attr('text-anchor', 'middle')
+    .attr('text-anchor', 'middle');
 
 // Add color/style with variables of data
 g.append("path")
@@ -65,24 +68,24 @@ g.append("path")
 
         // Display candidate, percentage, delegates won in donut hole
         holeText.append("tspan")
-            .text(d.data.name + " (" + d.data.poll + "%)")
+            .text(d.data.name + " (" + Math.round(100*(d.data.delegates/totalDelegates)) + "%)")
             .attr("class", "name")
             .attr("x", 0)
             .attr("dx", 0)
-            .attr("dy", 0)
+            .attr("dy", 0);
 
         holeText.append("tspan")
             .text(d.data.delegates + " Delegates")
             .attr("class", "del")
             .attr("x", 0)
             .attr("dx", 0)
-            .attr("dy", 20)
+            .attr("dy", 20);
     })
     .on("mouseout", function(d) {
-        d3.select(this).style("opacity", opacity)
+        d3.select(this).style("opacity", opacity);
         // Clear displayed info in donut hole
         d3.select(".candidate-text")
-            .text('')
+            .text('');
     })
 
 // Labels
@@ -91,7 +94,26 @@ g.append("text")
         return "translate(" + labelArc.centroid(d) + 40 + ")";
     })
     .text(function(d) {
-        if (d.data.poll >= 5) {
-            return d.data.poll + "%";
+        var perc = Math.round(100*(d.data.delegates/totalDelegates))
+        if (perc >= 5) {
+            return perc + "%";
         }
     })
+
+// Append national delegate results for all candidates
+function calculateTotalDelegates(candidateData) {
+    var results = {};
+
+    for (var c in candidateData) {
+        candidateName = candidateData[c].name
+        for (var s in stateData) {
+
+            console.log(stateData[s].results[0][candidateData[c]])
+            results[candidateName] = stateData[s].results[0][candidateData[c]]
+        }
+    }
+
+    // candidateData[c][]
+
+    return results
+}

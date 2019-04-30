@@ -17,7 +17,11 @@ DEM_PRIMARY_CSV = os.path.join(os.path.dirname(__file__), 'static', 'data', 'dem
 @app.route("/")
 @app.route("/index")
 def home():
-    return render_template("home.html", candidates=candidates, states=states)
+    return render_template("home.html",
+        candidates=candidates,
+        states=states,
+        total_delegates=total_delegates
+    )
 
 
 @app.route("/api/get_candidate_data", methods=['GET'])
@@ -38,6 +42,13 @@ def about():
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template("404.html"), 404
+
+
+def get_total_delegates(states):
+    total = 0
+    for state in states:
+        total += state['delegates']
+    return total
 
 
 def append_default_results(candidates, states):
@@ -85,6 +96,7 @@ conn.close()
 candidates = query_db('''SELECT * FROM candidates_table ORDER BY poll DESC ''')
 states = query_db('''SELECT * FROM states_table''')
 append_default_results(candidates, states)
+total_delegates = get_total_delegates(states)
 
 if __name__ == '__main__':
     # localhost:5000
