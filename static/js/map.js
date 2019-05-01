@@ -121,12 +121,15 @@ function showStateResults(selectedState, d3State, appendDelegatesFlag) {
     // Get Total Percentage points available to be assigned in state Results
     const availablePercPoints = Math.round(10*(100 - getTotalAssignedPercentages(selectedState)))/10;
 
+    const year = selectedState.date.substring(0,4);
+    const month = selectedState.date.substring(5,7);
+    const day = selectedState.date.substring(8);
     // State description
-    $("#state-options-info").text(stateName + " | " + selectedState.type
-        + " | " + selectedState.delegates + " Delegates | " + selectedState.date);
+    $("#state-options-info").text(stateName + " • " + selectedState.type
+        + " • " + selectedState.delegates + " Delegates • " + month + "/" + day + "/" + year);
 
     // Available Percentage Points to be Assigned
-    $(".delegates-available").text("Available Percentage Points to Assign: " + availablePercPoints)
+    $(".delegates-available").text("Available Percentage Points: " + availablePercPoints)
 
     // State candidate results
     $(".state-options-rows").html('');

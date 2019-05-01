@@ -3,7 +3,7 @@ addCandidatesTotalDelegates();
 const data = candidateData;
 
 // Set size and attributes of pie chart
-const width = 640;
+const width = 360;
 const height = 360;
 const radius = Math.min(width, height) / 2;
 const opacity = 1;
@@ -18,7 +18,7 @@ const pie = d3.pie()
 // Arc of pie circle
 const arc = d3.arc()
     .outerRadius(radius - 10)
-    .innerRadius(radius * 0.45);
+    .innerRadius(radius * 0.55);
 
 // Arc of labels in pie
 const labelArc = d3.arc()

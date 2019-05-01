@@ -15,7 +15,6 @@ DEM_PRIMARY_CSV = os.path.join(os.path.dirname(__file__), 'static', 'data', 'dem
 
 
 @app.route("/")
-@app.route("/index")
 def home():
     return render_template("home.html",
         candidates=candidates,
