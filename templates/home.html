@@ -5,7 +5,6 @@
 	var candidateData = JSON.parse('{{ candidates|tojson }}');
 	var stateData = JSON.parse('{{ states|tojson }}'); // stateData[0].results[x] -- x=0 is percentage, x=1 is delegates (once appended)
 	const totalDelegates = '{{ total_delegates }}';
-
 </script>
 
 <h2>Democratic Party Presidential Primary 2020</h2>
@@ -46,7 +45,6 @@
 			</tbody>
 		</table>
 	</div>
-	<!-- <div class="btn-group-vertical" role="group" aria-label="..." id="state-options-rows"></div> -->
 </div>
 
 <!-- Total Delegate Count Pie Chart -->

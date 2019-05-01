@@ -1,4 +1,4 @@
-// Candidate data for pie chart
+// Candidate data that includes delegates for pie chart
 addCandidatesTotalDelegates();
 var data = candidateData;
 
@@ -134,6 +134,7 @@ function addCandidatesTotalDelegates() {
     }
 }
 
+// OnClick refresh and update pie chart button
 $(document).ready(function() {
     $("#refresh").on("click", updatePie);
 });

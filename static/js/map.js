@@ -159,7 +159,7 @@ function showStateResults(selectedState, d3State, appendDelegatesFlag) {
 }
 
 // Calculates and updates HTML with candidate delegate count for states
-var showDelegates = (function(selectedState, appendDelegatesFlag) {
+function showDelegates(selectedState, appendDelegatesFlag) {
     // Calculate delegate count for current present percentages
     var delegates = calculateDelegates(selectedState, appendDelegatesFlag);
 
@@ -168,10 +168,10 @@ var showDelegates = (function(selectedState, appendDelegatesFlag) {
     $.each(delegates, function(index, val) {
         $(".state-options-rows tr").children('td[name="' + index + '"]').text(val + " delegates")
     });
-})
+}
 
 // Updates State Data with modified results, including managing 100% total
-var updateStateResults = (function(val, candidate, selectedState, d3State) {
+function updateStateResults(val, candidate, selectedState, d3State) {
     // Get available percentage points to assign a candidate
     var bucket = Math.round(10*(100 - getTotalAssignedPercentages(selectedState)))/10;
 
@@ -197,10 +197,10 @@ var updateStateResults = (function(val, candidate, selectedState, d3State) {
     // Update color of state to top candidate
     var topCandidate = getStateTopCandidate(candidate, selectedState);
     updateStateColor(topCandidate, selectedState, d3State);
-});
+}
 
 // Updates State Data with results when clicked with candidate choice
-var updateStateResultsByClick = (function(candidate, selectedState, d3State) {
+function updateStateResultsByClick(candidate, selectedState, d3State) {
     var selectedCandidateVal = selectedState.results[0][candidate];
 
     // Find candidate with greatest result in state
@@ -211,10 +211,10 @@ var updateStateResultsByClick = (function(candidate, selectedState, d3State) {
     updateStateResults(selectedCandidateVal, topCandidate, selectedState, d3State);
     // Update selected candidate with top val
     updateStateResults(topCandidateVal, candidate, selectedState, d3State);
-});
+}
 
 // Gets current top candidate in state's results
-var getStateTopCandidate = (function(candidate, selectedState) {
+function getStateTopCandidate(candidate, selectedState) {
     var topCandidate = candidate;
     for (var c in selectedState.results[0]) {
         if (selectedState.results[0][c] > selectedState.results[0][topCandidate]) {
@@ -222,25 +222,25 @@ var getStateTopCandidate = (function(candidate, selectedState) {
         }
     }
     return topCandidate;
-});
+}
 
 // Resets Map Back to Default
-var resetMap = (function() {
+function resetMap() {
     svg.selectAll("*").style("fill", defaultColor);
     //FIXME: Change all state results back to default (from candidates[0].poll)
-});
+}
 
 // Counts total spent percentage points in a state's results
-var getTotalAssignedPercentages = (function(selectedState) {
+function getTotalAssignedPercentages(selectedState) {
     var result = 0;
     for (var key in selectedState.results[0]) {
         result += selectedState.results[0][key];
     }
     return result;
-})
+}
 
 // Democratic delegate allocation calculation
-var calculateDelegates = (function(selectedState, appendDelegatesFlag) {
+function calculateDelegates(selectedState, appendDelegatesFlag) {
     var delegates = {};  // {name: delegates}
     var total = 0;      // total percentage over 15
 
@@ -282,7 +282,7 @@ var calculateDelegates = (function(selectedState, appendDelegatesFlag) {
     }
 
     return delegates;
-});
+}
 
 // Adds delegates calculated in state to stateData to be officially a part of national count
 function addDelegatesOfficially(selectedState, delegates) {
