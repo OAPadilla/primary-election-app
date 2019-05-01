@@ -1,46 +1,46 @@
 // Candidate data that includes delegates for pie chart
 addCandidatesTotalDelegates();
-var data = candidateData;
+const data = candidateData;
 
 // Set size and attributes of pie chart
-var width = 640;
-var height = 360;
-var radius = Math.min(width, height) / 2;
-var opacity = 1;
-var opacityHover = 0.7;
+const width = 640;
+const height = 360;
+const radius = Math.min(width, height) / 2;
+const opacity = 1;
+const opacityHover = 0.7;
 
 // Create pie shape holding data
-var pie = d3.pie()
+const pie = d3.pie()
     .value(function(d) {
         return Math.round(1000*(d.delegates/totalDelegates))/10;
     })(data);
 
 // Arc of pie circle
-var arc = d3.arc()
+const arc = d3.arc()
     .outerRadius(radius - 10)
     .innerRadius(radius * 0.45);
 
 // Arc of labels in pie
-var labelArc = d3.arc()
+const labelArc = d3.arc()
     .outerRadius(radius - 50)
     .innerRadius(radius - 50);
 
 // Set Pie SVG
-var pieSVG = d3.select("#pie-chart").append("svg")
+const pieSVG = d3.select("#pie-chart").append("svg")
     .attr("width", width)
     .attr("height", height)
     .append("g")
     .attr("transform", "translate(" + (width / 2) + "," + (height / 2) + ")");
 
 // Join data with the arcs in the pie
-var g = pieSVG.selectAll("arc")
+const g = pieSVG.selectAll("arc")
     .data(pie)
     .enter()
     .append("g")
     .attr("class", "arc");
 
 // Create center candidate data in donut hole
-var holeText = d3.select("#pie-chart").select("svg")
+const holeText = d3.select("#pie-chart").select("svg")
     .append("g")
     .append("text")
     .attr("class", "candidate-text")
@@ -77,7 +77,7 @@ g.append("path")
         // Clear displayed info in donut hole
         d3.select(".candidate-text")
             .text('');
-    })
+    });
 
 // Labels
 g.append("text")
@@ -85,22 +85,22 @@ g.append("text")
         return "translate(" + labelArc.centroid(d) + 40 + ")";
     })
     .text(function(d) {
-        var perc = Math.round(1000*(d.data.delegates/totalDelegates))/10;
+        const perc = Math.round(1000*(d.data.delegates/totalDelegates))/10;
         if (perc >= 5) {
             return perc + "%";
         }
-    })
+    });
 
 // Update Pie Chart with new data
 function updatePie() {
     addCandidatesTotalDelegates();
-    data = candidateData;
-    var pie = d3.pie()
+    const data = candidateData;
+    const pie = d3.pie()
         .value(function(d) {
             return Math.round(1000*(d.delegates/totalDelegates))/10;
         })(data);
 
-    path = d3.select("#pie-chart").selectAll("path").data(pie);
+    let path = d3.select("#pie-chart").selectAll("path").data(pie);
 
     path.attr("d", arc);
 
@@ -113,12 +113,12 @@ function updatePie() {
 
 // Append national delegate results for all candidates
 function addCandidatesTotalDelegates() {
-    for (var c in candidateData) {
+    for (let c in candidateData) {
         candidateData[c].delegates = 0;
     }
-    for (var c in candidateData) {
-        var candidateName = candidateData[c].name;
-        for (var s in stateData) {
+    for (let c in candidateData) {
+        let candidateName = candidateData[c].name;
+        for (let s in stateData) {
             // Check if state in stateData has delegate results, if not skip
             if (stateData[s].results[1] != null) {
                 // Check if candidate in candidateData has delegates key, if not make it =0
