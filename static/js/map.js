@@ -287,7 +287,6 @@ var calculateDelegates = (function(selectedState, appendDelegatesFlag) {
 // Adds delegates calculated in state to stateData to be officially a part of national count
 function addDelegatesOfficially(selectedState, delegates) {
     selectedState.results[1] = delegates;
-    // Generate pie chart
 }
 
 // Source: StackOverflow, by user Kaiido. Modified slightly

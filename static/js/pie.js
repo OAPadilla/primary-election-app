@@ -1,15 +1,6 @@
-//
-// var data = [{"name": "Joe Biden", "color": "#009933", "poll": 51, "delegates": 1868},
-//             {"name": "Bernie Sanders", "color": "#6699ff", "poll": 24, "delegates": 879},
-//             {"name": "Kamala Harris", "color": "#ff9966", "poll": 11, "delegates": 440}];
-
 // Candidate data for pie chart
-// console.log(totalDelegates)
-// console.log(candidateData)
-// console.log(stateData)
 addCandidatesTotalDelegates();
-var data = candidateData
-console.log(data);
+var data = candidateData;
 
 // Set size and attributes of pie chart
 var width = 640;
@@ -21,7 +12,7 @@ var opacityHover = 0.7;
 // Create pie shape holding data
 var pie = d3.pie()
     .value(function(d) {
-        return Math.round(100*(d.delegates/totalDelegates));
+        return Math.round(1000*(d.delegates/totalDelegates))/10;
     })(data);
 
 // Arc of pie circle
@@ -68,7 +59,7 @@ g.append("path")
 
         // Display candidate, percentage, delegates won in donut hole
         holeText.append("tspan")
-            .text(d.data.name + " (" + Math.round(100*(d.data.delegates/totalDelegates)) + "%)")
+            .text(d.data.name + " (" + Math.round(1000*(d.data.delegates/totalDelegates))/10 + "%)")
             .attr("class", "name")
             .attr("x", 0)
             .attr("dx", 0)
@@ -94,27 +85,55 @@ g.append("text")
         return "translate(" + labelArc.centroid(d) + 40 + ")";
     })
     .text(function(d) {
-        var perc = Math.round(100*(d.data.delegates/totalDelegates))
+        var perc = Math.round(1000*(d.data.delegates/totalDelegates))/10;
         if (perc >= 5) {
             return perc + "%";
         }
     })
 
-function change() {
+// Update Pie Chart with new data
+function updatePie() {
+    addCandidatesTotalDelegates();
+    data = candidateData;
+    var pie = d3.pie()
+        .value(function(d) {
+            return Math.round(1000*(d.delegates/totalDelegates))/10;
+        })(data);
 
+    path = d3.select("#pie-chart").selectAll("path").data(pie);
+
+    path.attr("d", arc);
+
+    d3.selectAll("text")
+        .data(pie)
+        .attr("transform", function(d) {
+            return "translate(" + labelArc.centroid(d) + 40 + ")";
+        });
 }
 
 // Append national delegate results for all candidates
 function addCandidatesTotalDelegates() {
-    console.log(stateData)
-    console.log(candidateData)
     for (var c in candidateData) {
-        let candidateName = candidateData[c].name
+        candidateData[c].delegates = 0;
+    }
+    for (var c in candidateData) {
+        var candidateName = candidateData[c].name;
         for (var s in stateData) {
-            let candidateDelegates = stateData[s].results[1]
-            if (candidateDelegates != null) {
-                candidateData[c]["delegates"] = candidateDelegates[candidateName]
+            // Check if state in stateData has delegate results, if not skip
+            if (stateData[s].results[1] != null) {
+                // Check if candidate in candidateData has delegates key, if not make it =0
+                if (candidateData[c]["delegates"] == null) {
+                    candidateData[c]["delegates"] = 0;
+                }
+                // Check if state delegate results in stateData includes the candidate
+                if (stateData[s].results[1][candidateName] != null) {
+                    candidateData[c]["delegates"] += stateData[s].results[1][candidateName];
+                }
             }
         }
     }
 }
+
+$(document).ready(function() {
+    $("#refresh").on("click", updatePie);
+});
