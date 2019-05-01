@@ -46,7 +46,7 @@ d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
 });
 
 // Clicking On States Actions
-var selectState = (function() {
+function selectState () {
     // Get selected candidate name
     var candidateName = d3.select("input[name='candidate']:checked").property("value");
     console.log(candidateName)
@@ -63,7 +63,7 @@ var selectState = (function() {
                 // Update State Data results with chosen color candidate as first
                 updateStateResultsByClick(candidateName, stateData[i], d3.select(this));
                 // Display state description and candidate results
-                showStateResults(stateData[i], d3.select(this));
+                showStateResults(stateData[i], d3.select(this), true);
                 break;
             }
         }
@@ -73,16 +73,16 @@ var selectState = (function() {
         for (var i = 0; i < stateData.length; i++) {
             if (stateData[i].name === stateName) {
                 // State description and candidate results
-                showStateResults(stateData[i], d3.select(this));
+                showStateResults(stateData[i], d3.select(this), false);
                 break;
             }
         }
 
     }
-});
+}
 
 // Updates US Map SVG State to appropriate color based on candidate chosen
-var updateStateColorByClick = (function(candidateName, d3State) {
+function updateStateColorByClick(candidateName, d3State) {
     // Get current color of selected state, converted to hex
     var currentColor =  rgba2hex(d3State.style('fill'));
 
@@ -100,10 +100,10 @@ var updateStateColorByClick = (function(candidateName, d3State) {
     } else {
         d3State.style("fill", candidateColor);
     }
-});
+}
 
 // Updates US Map SVG State to appropriate color based on candidate
-var updateStateColor = (function(candidateName, selectedState, d3State) {
+function updateStateColor(candidateName, selectedState, d3State) {
     // Get candidates color
     var candidateColor = defaultColor;
     for (var i = 0; i < candidateData.length; ++i) {
@@ -114,10 +114,10 @@ var updateStateColor = (function(candidateName, selectedState, d3State) {
 
     // Update color of selected state too apropriate candidates color
     d3State.style("fill", candidateColor);
-})
+}
 
 // Update HTML for State Options that contains State description and results
-var showStateResults = (function(selectedState, d3State) {
+function showStateResults(selectedState, d3State, appendDelegatesFlag) {
     // Get Total Percentage points available to be assigned in state Results
     var availablePercPoints = Math.round(10*(100 - getTotalAssignedPercentages(selectedState)))/10;
 
@@ -144,24 +144,24 @@ var showStateResults = (function(selectedState, d3State) {
         `);
 
         // Gets state's candidate delegate counts
-        showDelegates(selectedState);
+        showDelegates(selectedState, appendDelegatesFlag);
 
         // Event Listener for when a value is updated
         $("#perc-" + candidateData[j].index).on("change", function() {
             var val = this.value;
             var name = this.name;
             updateStateResults(val, name, selectedState, d3State);
-            showDelegates(selectedState);
-            //FIXME Add/save delegates to candidateData
+            // showDelegates has appendDelegatesFlag=true so delegate count is officially counted nationally
+            showDelegates(selectedState, true);
         });
 
     }
-});
+}
 
 // Calculates and updates HTML with candidate delegate count for states
-var showDelegates = (function(selectedState) {
+var showDelegates = (function(selectedState, appendDelegatesFlag) {
     // Calculate delegate count for current present percentages
-    var delegates = calculateDelegates(selectedState);
+    var delegates = calculateDelegates(selectedState, appendDelegatesFlag);
 
     // Update HTML for candidate delegate counts
     $(".state-options-rows tr").children("td#addon-del").text("")
@@ -240,7 +240,7 @@ var getTotalAssignedPercentages = (function(selectedState) {
 })
 
 // Democratic delegate allocation calculation
-var calculateDelegates = (function(selectedState) {
+var calculateDelegates = (function(selectedState, appendDelegatesFlag) {
     var delegates = {};  // {name: delegates}
     var total = 0;      // total percentage over 15
 
@@ -275,8 +275,20 @@ var calculateDelegates = (function(selectedState) {
         }
     }
 
+    // If flag true, adds state delegates to stateData officially for national count
+    // Flag is true when a state is colored in, otherwise don't consider results official
+    if (appendDelegatesFlag) {
+        addDelegatesOfficially(selectedState, delegates);
+    }
+
     return delegates;
 });
+
+// Adds delegates calculated in state to stateData to be officially a part of national count
+function addDelegatesOfficially(selectedState, delegates) {
+    selectedState.results[1] = delegates;
+    // Generate pie chart
+}
 
 // Source: StackOverflow, by user Kaiido. Modified slightly
 function rgba2hex(orig) {

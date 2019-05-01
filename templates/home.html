@@ -3,7 +3,7 @@
 <!-- Share data with map.js -->
 <script type="text/javascript">
 	var candidateData = JSON.parse('{{ candidates|tojson }}');
-	var stateData = JSON.parse('{{ states|tojson }}');
+	var stateData = JSON.parse('{{ states|tojson }}'); // stateData[0].results[x] -- x=0 is percentage, x=1 is delegates (once appended)
 	const totalDelegates = '{{ total_delegates }}';
 </script>
 

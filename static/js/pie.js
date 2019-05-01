@@ -3,12 +3,12 @@
 //             {"name": "Bernie Sanders", "color": "#6699ff", "poll": 24, "delegates": 879},
 //             {"name": "Kamala Harris", "color": "#ff9966", "poll": 11, "delegates": 440}];
 
-// FIXME: Waiting for candidateData to have a delegates key-value
 // Candidate data for pie chart
-console.log(totalDelegates)
-console.log(candidateData)
-console.log(stateData)
-var data = candidateData;
+// console.log(totalDelegates)
+// console.log(candidateData)
+// console.log(stateData)
+addCandidatesTotalDelegates();
+var data = candidateData
 console.log(data);
 
 // Set size and attributes of pie chart
@@ -100,20 +100,21 @@ g.append("text")
         }
     })
 
-// // Append national delegate results for all candidates
-// function getCandidatesTotalDelegates(candidateData) {
-//     var results = 0;
-//
-//
-//
-//     // for (var c in candidateData) {
-//     //     candidateName = candidateData[c].name
-//     //     for (var s in stateData) {
-//     //         console.log(stateData[s].results[0][candidateName])
-//     //         // console.log(stateData[s].results[0][candidateData[c]])
-//     //         // results[candidateName] = stateData[s].results[0][candidateData[c]]
-//     //     }
-//     // }
-//
-//     return results
-// }
+function change() {
+
+}
+
+// Append national delegate results for all candidates
+function addCandidatesTotalDelegates() {
+    console.log(stateData)
+    console.log(candidateData)
+    for (var c in candidateData) {
+        let candidateName = candidateData[c].name
+        for (var s in stateData) {
+            let candidateDelegates = stateData[s].results[1]
+            if (candidateDelegates != null) {
+                candidateData[c]["delegates"] = candidateDelegates[candidateName]
+            }
+        }
+    }
+}
