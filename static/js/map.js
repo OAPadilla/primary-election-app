@@ -223,8 +223,12 @@ function getStateTopCandidate(candidate, selectedState) {
 
 // Resets Map Back to Default
 function resetMap() {
-    svg.selectAll("*").style("fill", defaultColor);
-    //FIXME: Change all state results back to default (from candidates[0].poll)
+    // Cleans map of color
+    svg.selectAll("path").style("fill", defaultColor);  //FIXME: Map glitches when reset
+    // Clear results that holds delegates, clears pie chart data
+    for (let s in stateData) {
+        stateData[s].results.splice(1);
+    }
 }
 
 // Counts total spent percentage points in a state's results
@@ -295,3 +299,8 @@ function rgba2hex(orig) {
         (rgb[3] | 1 << 8).toString(16).slice(1) : orig;
     return '#' + hex;
 }
+
+// OnClick refresh map button
+$(document).ready(function() {
+    $("#reset-map").on("click", resetMap);
+});
