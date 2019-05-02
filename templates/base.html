@@ -5,8 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Primary Election Map</title>
         <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/layout.css') }}">
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/layout.css') }}">
         <script src="{{ url_for('static', filename='js/lib/jquery-3.4.0.min.js') }}"></script>
         <script src="https://d3js.org/d3.v4.min.js"></script>
         <script src="https://d3js.org/topojson.v2.min.js"></script>
@@ -28,7 +28,7 @@
                         <a class="navbar-brand" href="">Interactive Primary Election</a>
                     </div>
                     <!-- Nav links -->
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <div class="collapse navbar-collapse">
                         <ul class="nav navbar-nav">
                             <li><a href="{{ url_for('home') }}">Map</a></li>
                             <li><a href="{{ url_for('about') }}">About</a></li>
