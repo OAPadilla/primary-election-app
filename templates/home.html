@@ -40,20 +40,37 @@
 		<div class="col-xs-6">
 			<!-- State Results Configuration Options -->
 			<div class="state-options">
-				<div class="panel panel-default">
-					<!-- State Info header -->
-					<div class="panel-heading" id="state-options-info">SELECT STATE</div>
 
-					<!-- Table -->
-					<table class="table table-condensed">
-						<tbody>
+				<!-- <div class="panel panel-default"> -->
+					<!-- State Info header -->
+					<!-- <div class="panel-heading" id="state-options-info">SELECT STATE</div> -->
+					<!-- Table: Rows for candidate results -->
+					<!-- <table class="table table-responsive" id="state-options-rows">
+						<tr> -->
 							<!-- State Delegates Available to be Assigned -->
-							<div class="delegates-available"></div>
-							<!-- Rows for candidate results -->
-							<div class="state-options-rows"></div>
-						</tbody>
+							<!-- <div class="delegates-available"></div>
+						</tr>
+					</table>
+				</div> -->
+
+				<div class="panel panel-default">
+					<table class="table table-condensed" id="state-options-rows">
+						<div class="panel-heading" id="state-options-info">SELECT STATE</div>
+					    <thead>
+							<tr>
+								<!-- State Delegates Available to be Assigned -->
+							</tr>
+							<tr>
+								<th>Candidate</th>
+								<th>Popular Vote</th>
+								<th>Pledged Delegates</th>
+							</tr>
+					    </thead>
+					    <tbody>
+					    </tbody>
 					</table>
 				</div>
+
 			</div>
 
 		</div>

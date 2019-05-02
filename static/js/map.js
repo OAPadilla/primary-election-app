@@ -125,23 +125,23 @@ function showStateResults(selectedState, d3State, appendDelegatesFlag) {
     const month = selectedState.date.substring(5,7);
     const day = selectedState.date.substring(8);
     // State description
-    $("#state-options-info").text(stateName + " • " + selectedState.type
-        + " • " + selectedState.delegates + " Delegates • " + month + "/" + day + "/" + year);
+    $("#state-options-info").text(stateName + " • " + selectedState.delegates + " Delegates • "
+        + selectedState.type + " • " + month + "/" + day + "/" + year);
 
     // Available Percentage Points to be Assigned
-    $(".delegates-available").text("Available Percentage Points: " + availablePercPoints)
+    $("#state-options-rows thead tr:first-child").html("<th>Available Percentage Points: " + availablePercPoints + "</th>");
 
     // State candidate results
-    $(".state-options-rows").html('');
+    $("#state-options-rows tbody").html('');
     for (let j = 0; j < candidateData.length; j++) {
         // Table rows html
-        $(".state-options-rows").append(`
+        $("#state-options-rows tbody").append(`
             <tr id="` + candidateData[j].name + `">
                <td id="addon-cand">` + candidateData[j].name  + `</td>
                <td><input type="number" class="form-control" id="perc-` + candidateData[j].index + `" aria-label="..."
                    name="` + candidateData[j].name + `" oninput="validity.valid||(value='');"
-                   min="0" max="` + (selectedState.results[0][candidateData[j].name] + availablePercPoints) + `" step=0.1 value="` + selectedState.results[0][candidateData[j].name] + `"></td>
-               <td id="addon-perc">%</td>
+                   min="0" max="` + (selectedState.results[0][candidateData[j].name] + availablePercPoints) + `" step=0.1
+                   value="` + selectedState.results[0][candidateData[j].name] + `">%</td>
                <td id="addon-del" name="` + candidateData[j].name + `"></td>
             </tr>
         `);
@@ -164,9 +164,9 @@ function showDelegates(selectedState, appendDelegatesFlag) {
     const delegates = calculateDelegates(selectedState, appendDelegatesFlag);
 
     // Update HTML for candidate delegate counts
-    $(".state-options-rows tr").children("td#addon-del").text("")
+    $("#state-options-rows tbody tr").children("td#addon-del").text("")
     $.each(delegates, function(index, val) {
-        $(".state-options-rows tr").children('td[name="' + index + '"]').text(val + " delegates")
+        $("#state-options-rows tbody tr").children('td[name="' + index + '"]').text(val + " Delegates")
     });
 }
 
@@ -183,7 +183,7 @@ function updateStateResults(val, candidate, selectedState, d3State) {
     bucket = Math.round(10*(bucket))/10;
 
     // Update HTML for available percentage Points
-    $(".delegates-available").text("Available Percentage Points to Assign: " + bucket);
+    $("#state-options-rows thead tr:first-child").html("<th>Available Percentage Points: " + bucket + "</th>");
 
     // Update candidate result
     selectedState.results[0][candidate] = parseFloat(val);

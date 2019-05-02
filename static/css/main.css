@@ -3,6 +3,12 @@
   border-color: #adcbe3;
 }
 
+/* Title */
+h2 {
+    text-align: center;
+}
+
+/* US Map SVG */
 .states {
     fill: #bfbfbf;
 }
@@ -24,24 +30,31 @@
     text-align: center;
 }
 
+/* State Options Table */
 .panel-heading {
     text-align: center;
     font-size: 1.15em;
     font-weight: bold;
 }
 
-.delegates-available {
+#state-options-rows thead tr {
     text-align: center;
-    font-size: 1.1em;
+    font-size: 1em;
     font-weight: bold;
 }
 
-
-#pie-chart {
-    font: 16px bold black;
-    text-align: center;
+td {
+    white-space: nowrap;
 }
 
-h2 {
+input[type=number] {
+    width: 80px;
+    height: 20px;
+    float: left;
+}
+
+/* Pie Chart SVG */
+#pie-chart {
+    font: 16px bold black;
     text-align: center;
 }
