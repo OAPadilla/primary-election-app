@@ -129,7 +129,7 @@ function showStateResults(selectedState, d3State, appendDelegatesFlag) {
         + selectedState.type + " • " + month + "/" + day + "/" + year);
 
     // Available Percentage Points to be Assigned
-    $("#state-options-rows thead tr:first-child").html("<th>Available Percentage Points: " + availablePercPoints + "</th>");
+    $("#state-options-available-perc").text("Available Percentage Points: " + availablePercPoints);
 
     // State candidate results
     $("#state-options-rows tbody").html('');
@@ -183,7 +183,7 @@ function updateStateResults(val, candidate, selectedState, d3State) {
     bucket = Math.round(10*(bucket))/10;
 
     // Update HTML for available percentage Points
-    $("#state-options-rows thead tr:first-child").html("<th>Available Percentage Points: " + bucket + "</th>");
+    $("#state-options-available-perc").text("Available Percentage Points: " + bucket);
 
     // Update candidate result
     selectedState.results[0][candidate] = parseFloat(val);

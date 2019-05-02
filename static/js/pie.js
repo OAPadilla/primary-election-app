@@ -109,6 +109,9 @@ function updatePie() {
         .attr("transform", function(d) {
             return "translate(" + labelArc.centroid(d) + 40 + ")";
         });
+
+    d3.select("#pie-chart").style("background-color", "transparent").style("opacity", 1.0);
+
 }
 
 // Append national delegate results for all candidates
