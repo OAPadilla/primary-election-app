@@ -18,7 +18,7 @@ const pie = d3.pie()
 // Arc of pie circle
 const arc = d3.arc()
     .outerRadius(radius - 10)
-    .innerRadius(radius * 0.55);
+    .innerRadius(radius * 0.56);
 
 // Arc of labels in pie
 const labelArc = d3.arc()
@@ -60,6 +60,7 @@ g.append("path")
         // Display candidate, percentage, delegates won in donut hole
         holeText.append("tspan")
             .text(d.data.name + " (" + Math.round(1000*(d.data.delegates/totalDelegates))/10 + "%)")
+            .style("font-family", "sans-serif")
             .attr("class", "name")
             .attr("x", 0)
             .attr("dx", 0)
