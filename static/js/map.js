@@ -134,9 +134,9 @@ function showStateResults(selectedState, d3State, appendDelegatesFlag) {
 
     $("#state-options-rows thead").html(`
         <tr>
-            <th>Candidate</th>
-            <th>Popular Vote</th>
-            <th>Pledged Delegates</th>
+            <th class="text-center">Candidate</th>
+            <th class="text-left">Popular Vote</th>
+            <th class="text-center">Pledged Delegates</th>
         </tr>`);
 
     // State candidate results

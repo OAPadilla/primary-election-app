@@ -8,6 +8,9 @@ h2 {
     text-align: center;
 }
 
+/* About Section */
+
+
 /* US Map SVG */
 .states {
     fill: #bfbfbf;
@@ -37,7 +40,7 @@ h2 {
     font-weight: bold;
 }
 
-#state-options-rows thead tr th, #state-options-available-perc {
+#state-options-rows thead tr, #state-options-available-perc {
     text-align: center;
     font-size: 1em;
     font-weight: bold;
