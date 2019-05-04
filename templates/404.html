@@ -1,7 +1,40 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="error-message">
-	<h2>ERROR 404</h2>
-    <h3>Page Not Found.</h3>
+<div class="container">
+	<div class="row">
+		<div class="col-xs-18 col-sm-12 col-md-12">
+			<h2>Sorry, that page does not exist!</h2>
+			<hr>
+			<h4 class="error">Page not found.</h4>
+		</div>
+	</div>
 </div>
+<br>
+<br>
+
+<!-- Footer -->
+<footer class="footer">
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-9 col-sm-8">
+				<h4 class="title-footer">Contact</h4>
+				<h5>Oscar@PrimaryDraft.com • Questions, comments, & feedback are welcome!</h5>
+			</div>
+			<div class="col-xs-3 col-sm-4">
+				<h4 class="title-footer">Share</h4>
+				<!-- <a href="#" class="social"><i class="fab fa-twitter-square fa-2x" aria-hidden="true"></i></a> -->
+				<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button"
+					data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+				<!-- <div class="fb-share-button" data-href="https://www.PrimaryDraft.com" data-layout="button_count" data-size="small">
+					<a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.PrimaryDraft.com%2F&amp;src=sdkpreparse"
+					class="fb-xfbml-parse-ignore">Share</a></div> -->
+			</div>
+		</div>
+
+		<hr class="hr-footer">
+
+		<div class="row text-center"><a href="https://www.PrimaryDraft.com">Primary Draft</a> Copyright © 2019 Oscar Padilla</div>
+	</div>
+</footer>
 {% endblock %}

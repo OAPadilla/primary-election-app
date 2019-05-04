@@ -5,6 +5,11 @@ import sqlite3
 from sqlite3 import Error
 import pandas as pd
 
+__author__ = "Oscar Antonio Padilla"
+__copyright__ = "Copyright 2019, Primary Draft"
+__email__ = "PadillaOscarA@gmail.com"
+__status__ = "Development"
+
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
 
@@ -44,6 +49,9 @@ def page_not_found(error):
 
 
 def get_total_delegates(states):
+    """
+    Returns total number of delegates for all states in the state data
+    """
     total = 0
     for state in states:
         total += state['delegates']
@@ -51,16 +59,22 @@ def get_total_delegates(states):
 
 
 def append_default_results(candidates, states):
-    # Collect default poll numbers for candidates
+    """
+    Collects default poll numbers for candidates from candidates data and
+    appends those default results to each state in the state data
+    """
     results = {}
     for c in candidates:
         results[c['name']] = c['poll']
-    # Append result to every state
+
     for state in states:
         state['results'] = [results]
 
 
 def get_db():
+    """
+    Creates connection with sqlite database
+    """
     try:
         conn = sqlite3.connect(DATABASE)
         conn.row_factory = dict_factory
@@ -70,11 +84,17 @@ def get_db():
 
 
 def csv_to_db(conn, csvfile, table_name):
+    """
+    Converts a CSV file to a SQL database table
+    """
     df = pd.read_csv(csvfile)
     df.to_sql(table_name, conn, if_exists='replace')
 
 
 def query_db(query, args=(), one=False):
+    """
+    Query a database
+    """
     c = get_db().execute(query, args)
     res = c.fetchall()
     c.close()
@@ -82,21 +102,25 @@ def query_db(query, args=(), one=False):
 
 
 def dict_factory(c, row):
+    """
+    Forms dictionary from database data in support of row_factory
+    """
     d = {}
     for idx, col in enumerate(c.description):
         d[col[0]] = row[idx]
     return d
 
+""" Create CANDIDATE and STATE tables from CSV files """
 conn = get_db()
 csv_to_db(conn, CANDIDATE_CSV, "candidates_table")
 csv_to_db(conn, DEM_PRIMARY_CSV, "states_table")
 conn.close()
 
+""" Query database and prepare data for client """
 candidates = query_db('''SELECT * FROM candidates_table ORDER BY poll DESC ''')
 states = query_db('''SELECT * FROM states_table''')
 append_default_results(candidates, states)
 total_delegates = get_total_delegates(states)
 
 if __name__ == '__main__':
-    # localhost:5000
     app.run(debug=True)

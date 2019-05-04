@@ -22,7 +22,7 @@ d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
         })
     });
 
-    // Build paths, on click get state name and do action
+    // Build paths for US States, on click get state name and do action
     svg.append("g")
         .attr("class", "states")
         .selectAll("path")
@@ -121,9 +121,11 @@ function showStateResults(selectedState, d3State, appendDelegatesFlag) {
     // Get Total Percentage points available to be assigned in state Results
     const availablePercPoints = Math.round(10*(100 - getTotalAssignedPercentages(selectedState)))/10;
 
+    // Parse dates
     const year = selectedState.date.substring(0,4);
     const month = selectedState.date.substring(5,7);
     const day = selectedState.date.substring(8);
+
     // State description
     $("#state-options-info").text(stateName + " • " + selectedState.delegates + " Delegates • "
         + selectedState.type + " • " + month + "/" + day + "/" + year);
@@ -132,6 +134,7 @@ function showStateResults(selectedState, d3State, appendDelegatesFlag) {
     $("#state-options-available-perc").text("Available Percentage Points: " + availablePercPoints);
     // $("#state-options-rows thead tr:first-child").html("<th>Available Percentage Points: " + availablePercPoints + "</th>");
 
+    // Column titles
     $("#state-options-rows thead").html(`
         <tr>
             <th class="text-center">Candidate</th>
@@ -254,8 +257,8 @@ function getTotalAssignedPercentages(selectedState) {
 
 // Democratic delegate allocation calculation
 function calculateDelegates(selectedState, appendDelegatesFlag) {
-    const delegates = {};  // {name: delegates}
-    let total = 0;      // total percentage over 15
+    const delegates = {};   // {name: delegates}
+    let total = 0;          // total percentage over 15
 
     // Get results of candidates in selected state with >=15%
     for (let key in selectedState.results[0]) {
@@ -302,6 +305,7 @@ function addDelegatesOfficially(selectedState, delegates) {
     selectedState.results[1] = delegates;
 }
 
+// Converts rgb(,,) values to hex
 // Modified from Source: StackOverflow, by user Kaiido.
 function rgba2hex(orig) {
     let rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i),

@@ -3,7 +3,7 @@ body {
     background-color: #f2f8fc !important;
 }
 
-/* border breaks */
+/* Border Breaks */
 hr {
     border-color: #2a4d69 !important;
     opacity: 0.15;
@@ -158,4 +158,9 @@ input[type=number] {
 }
 .footer .social-icon .fb-share-button {
     width: 40;
+}
+
+/* Error Page */
+.error {
+    text-align: center;
 }
