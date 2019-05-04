@@ -3,13 +3,19 @@ body {
     background-color: #f2f8fc !important;
 }
 
+/* border breaks */
+hr {
+    border-color: #2a4d69 !important;
+    opacity: 0.15;
+}
+
 /* Title */
 h2 {
     text-align: center;
 }
-
-/* About Section */
-
+h2, strong, .summary {
+    color: #2a4d69 !important;
+}
 
 /* US Map SVG */
 .states {
@@ -68,6 +74,7 @@ input[type=number] {
 .navbar-custom {
     background-color: #2a4d69;
     border-color: #f2f8fc;
+    padding: 10px 0 10px 0;
 }
 .navbar-custom .navbar-brand {
     color: #f2f8fc;
@@ -125,19 +132,30 @@ input[type=number] {
     background-color: #2a4d69;
     color: #f2f8fc;
 }
-.footer .title{
+.footer .title {
     text-align: left;
     color: #f2f8fc;
     font-size: 18px;
 }
-.footer .category a {
-    text-decoration: none;
+.footer a, .footer a:hover{
     color: #f2f8fc;
+}
+.footer .title-footer {
+    color: #f2f8fc;
+}
+.footer .hr-footer {
+    border-color: #f2f8fc !important;
+}
+.footer .social-icon {
+    padding: 0px;
+    margin: 0px;
+}
+.footer .social-icon a {
     display: inline-block;
-    padding: 5px 20px;
-    margin: 1px;
-    border-radius:4px;
-    margin-top: 6px;
-    background-color: black;
-    border: solid 1px #f2f8fc;
+    color: #f2f8fc;
+    font-size: 40px;
+    padding: 5px;
+}
+.footer .social-icon .fb-share-button {
+    width: 40;
 }

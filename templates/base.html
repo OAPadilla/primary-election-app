@@ -3,9 +3,23 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Primary Election Map</title>
+        <title>Primary Draft: Interactive Election Map 2020</title>
+
+        <meta name="description" content="Primary Draft simulates the Democratic Party 2020 primary
+            elections for experimenting with state results and allocating delegates among
+            presidential candidates on an interactive United States map."/>
+        <meta property="og:url"           content="https://www.PrimaryDraft.com" />
+        <meta property="og:type"          content="website" />
+        <meta property="og:title"         content="Primary Draft" />
+        <meta property="og:description"   content="Primary Draft simulates the Democratic Party 2020 primary
+            elections for experimenting with state results and allocating delegates among
+            presidential candidates on an interactive United States map." />
+        <meta property="og:image"         content="{{ url_for('static', filename='img/logo.png') }}" />
+
         <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+        <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+            integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous"> -->
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/layout.css') }}">
         <script src="{{ url_for('static', filename='js/lib/jquery-3.4.0.min.js') }}"></script>
         <script src="https://d3js.org/d3.v4.min.js"></script>
@@ -13,29 +27,35 @@
     </head>
     <body>
         {% extends "bootstrap/base.html" %}
+        <!-- Facebook Share Button -->
+        <div id="fb-root"></div>
+        <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.3"></script>
+
         {% block navbar %}
-            <!-- Navigation Bar -->
-            <nav class="navbar navbar-custom navbar-static-top">
-                <div class="container">
-                    <!-- Brand and toggle -->
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" href="/">Interactive Primary Election</a>
-                    </div>
-                    <!-- Nav links -->
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                        <ul class="nav navbar-nav">
-                            <li><a href="{{ url_for('home') }}">Map</a></li>
-                            <li><a href="{{ url_for('about') }}">About</a></li>
-                        </ul>
-                    </div>
+        <!-- Navigation Bar -->
+        <nav class="navbar navbar-custom navbar-static-top">
+            <div class="container">
+                <!-- Brand and toggle -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a href="{{ url_for('home') }}">
+                        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Primary Draft">
+                    </a>
                 </div>
-            </nav>
+                <!-- Nav links -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="{{ url_for('home') }}">Map</a></li>
+                        <li><a href="{{ url_for('about') }}">About</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
         {% endblock %}
 
         <div class="container-fluid">
