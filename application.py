@@ -1,3 +1,5 @@
+"""run.py: Primary Draft Interactive Primary Election 2020 Flask Application"""
+
 from flask import Flask, render_template, jsonify, g
 from flask_bootstrap import Bootstrap
 import os
@@ -10,8 +12,8 @@ __copyright__ = "Copyright 2019, Primary Draft"
 __email__ = "PadillaOscarA@gmail.com"
 __status__ = "Development"
 
-app = Flask(__name__)
-bootstrap = Bootstrap(app)
+application = Flask(__name__)
+bootstrap = Bootstrap(application)
 
 
 DATABASE = os.path.join(os.path.dirname(__file__), 'database.sqlite3')
@@ -19,7 +21,7 @@ CANDIDATE_CSV = os.path.join(os.path.dirname(__file__), 'static', 'data', 'dem_c
 DEM_PRIMARY_CSV = os.path.join(os.path.dirname(__file__), 'static', 'data', 'dem_primary.csv')
 
 
-@app.route("/")
+@application.route("/")
 def home():
     return render_template("home.html",
         candidates=candidates,
@@ -28,22 +30,22 @@ def home():
     )
 
 
-@app.route("/api/get_candidate_data", methods=['GET'])
+@application.route("/api/get_candidate_data", methods=['GET'])
 def get_candidate_data():
     return jsonify(candidates), 200
 
 
-@app.route("/api/get_state_data", methods=['GET'])
+@application.route("/api/get_state_data", methods=['GET'])
 def get_state_data():
     return jsonify(states), 200
 
 
-@app.route("/about")
+@application.route("/about")
 def about():
     return render_template("about.html")
 
 
-@app.errorhandler(404)
+@application.errorhandler(404)
 def page_not_found(error):
     return render_template("404.html"), 404
 
@@ -123,4 +125,4 @@ append_default_results(candidates, states)
 total_delegates = get_total_delegates(states)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    application.run(debug=True)
