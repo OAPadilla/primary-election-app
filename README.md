@@ -50,6 +50,39 @@ with state results and allocating delegates among presidential candidates on an 
 
 ## Getting Started
 
+### Requirements
+Python 3.6+, pip, Flask
+
+### Local Installation
+
+1. Clone the repo:
+```
+$ git clone https://github.com/OAPadilla/primary-election-app.git
+$ cd primary-election-app
+```
+2. Create and activate a virtual environment:
+```
+$ python -m venv venv
+
+Windows
+$ venv\Scripts\activate.bat
+
+Unix/MacOS
+$ source venv/bin/activate
+```
+3. Install the dependencies:
+```
+$ pip install -r requirements.txt
+```
+4. Run the application:
+```
+$ python application.py
+```
+5. Navigate to this URL in your browser:
+```
+http://localhost:5000
+```
+
 ## Built With
 
 ## To-do Backlog
@@ -57,3 +90,4 @@ with state results and allocating delegates among presidential candidates on an 
 ## Acknowledgements
 
 ## Copyright
+Copyright © 2019, Oscar Padilla
