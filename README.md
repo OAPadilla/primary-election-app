@@ -48,19 +48,26 @@ with state results and allocating delegates among presidential candidates on an 
 					</li>
 				</ol>
 
+## Built With
+* [Flask](http://flask.pocoo.org/) - Web Framework for Python
+* [SQLite 3](https://www.sqlite.org/index.html) - Relational Database Management System
+* [D3.js v4](https://d3js.org/) - Dynamic and Interactive Visualizations with JavaScript
+* [TopoJSON](https://github.com/topojson) - Extension of GeoJSON that Encodes Topology
+* [jQuery 3.4](https://jquery.com/) - HTML DOM Manipulation with JavaScript
+* [Bootstrap 3](https://getbootstrap.com/) - Front-end Framework
+
 ## Getting Started
 
 ### Requirements
-Python 3.6+, pip, Flask
+[Python 3.6+](https://www.python.org/)
 
 ### Local Installation
-
-1. Clone the repo:
+Clone the repo:
 ```
 $ git clone https://github.com/OAPadilla/primary-election-app.git
 $ cd primary-election-app
 ```
-2. Create and activate a virtual environment:
+Create and activate a virtual environment:
 ```
 $ python -m venv venv
 
@@ -70,24 +77,21 @@ $ venv\Scripts\activate.bat
 Unix/MacOS
 $ source venv/bin/activate
 ```
-3. Install the dependencies:
+Install the dependencies:
 ```
 $ pip install -r requirements.txt
 ```
-4. Run the application:
+Run the application:
 ```
 $ python application.py
 ```
-5. Navigate to this URL in your browser:
+Navigate to this URL in your browser:
 ```
 http://localhost:5000
 ```
 
-## Built With
-
-## To-do Backlog
-
 ## Acknowledgements
+Election information sourced from [TheGreenPapers.com](https://www.TheGreenPapers.com)
 
 ## Copyright
 Copyright © 2019, Oscar Padilla
