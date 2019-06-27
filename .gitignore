@@ -1,7 +1,10 @@
-.idea/
 venv/
 docs/
 database.sqlite3
+
+# Development Environments
+.idea/
+.vscode/
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*

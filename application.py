@@ -1,4 +1,4 @@
-"""run.py: Primary Draft Interactive Primary Election 2020 Flask Application"""
+"""application.py: Primary Draft Interactive Primary Election 2020 Flask Application"""
 
 from flask import Flask, render_template, jsonify, g
 from flask_bootstrap import Bootstrap
