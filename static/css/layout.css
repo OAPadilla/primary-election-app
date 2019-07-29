@@ -74,7 +74,7 @@ input[type=number] {
 .navbar-custom {
     background-color: #2a4d69;
     border-color: #f2f8fc;
-    padding: 10px 0 10px 0;
+    padding: 10px 0px;
 }
 .navbar-custom .navbar-brand {
     color: #f2f8fc;
@@ -88,10 +88,31 @@ input[type=number] {
 } */
 .navbar-custom .navbar-nav > li > a {
   color: #f2f8fc;
+  font-size: 24;
+  font-weight: bold;
+  opacity: 0.85;
+  position: relative;
+  padding: 15px 0px;
+  margin: 0px 10px;
 }
 .navbar-custom .navbar-nav > li > a:hover,
 .navbar-custom .navbar-nav > li > a:focus {
-  color: #2a4d69;
+  background-color: #2a4d69;
+  opacity: 1;
+}
+.navbar-custom .navbar-nav > li > a::before {
+    transition: 300ms;
+    height: 3px;
+    content: "";
+    position: absolute;
+    background-color: #f2f8fc;
+  }
+.nav-link::before {
+    width: 0%;
+    bottom: 12px;
+}
+.nav-link:hover::before {
+    width: 100%;
 }
 /* .navbar-custom .navbar-nav > .active > a,
 .navbar-custom .navbar-nav > .active > a:hover,
