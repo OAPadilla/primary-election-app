@@ -16,6 +16,7 @@
 			<div class="candidates">
 				<div class="btn-group" role="group" aria-label="..." data-toggle="buttons">
 					<label class="btn btn-default" role="group">
+						<img src="{{ url_for('static', filename='img/default_button.png') }}" height="12" width="12">
 						<input type="radio" name="candidate" value="Custom" checked><strong>Custom</strong>
 					</label>
 					{% for candidate in candidates %}
