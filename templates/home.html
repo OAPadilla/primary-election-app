@@ -20,6 +20,7 @@
 					</label>
 					{% for candidate in candidates %}
 					<label class="btn btn-default" role="group">
+						<img src="{{ url_for('static', filename='img/' + candidate.color + '.png') }}" height="12" width="12">
 						<input type="radio" name="candidate" value="{{ candidate.name }}">{{ candidate.name }}
 					</label>
 					{% endfor %}
