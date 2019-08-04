@@ -131,8 +131,16 @@ function showStateResults(selectedState, d3State, appendDelegatesFlag) {
         + selectedState.type + " • " + month + "/" + day + "/" + year);
 
     // Available Percentage Points to be Assigned
-    $("#state-options-available-perc").text("Available Percentage Points: " + availablePercPoints);
-    // $("#state-options-rows thead tr:first-child").html("<th>Available Percentage Points: " + availablePercPoints + "</th>");
+    $("#state-options-available-perc").html(`
+        <button type="button" class="btn btn-default btn-sm" id="reset-state">
+            <span class="glyphicon glyphicon-refresh"></span>
+        </button>
+        Available Percentage Points: ` + availablePercPoints);
+
+    // OnClick reset state allocated percentage points all to zero
+    $("#reset-state").on("click", function() {
+        resetState();
+    });
 
     // Column titles
     $("#state-options-rows thead").html(`
@@ -194,8 +202,16 @@ function updateStateResults(val, candidate, selectedState, d3State) {
     bucket = Math.round(10*(bucket))/10;
 
     // Update HTML for available percentage Points
-    $("#state-options-available-perc").text("Available Percentage Points: " + bucket);
-    // $("#state-options-rows thead tr:first-child").html("<th>Available Percentage Points: " + bucket + "</th>");
+    $("#state-options-available-perc").html(`
+        <button type="button" class="btn btn-default btn-sm" id="reset-state">
+            <span class="glyphicon glyphicon-refresh"></span>
+        </button>
+        Available Percentage Points: ` + bucket);
+
+    // OnClick reset state allocated percentage points all to zero
+    $("#reset-state").on("click", function() {
+        resetState();
+    });
 
     // Update candidate result
     selectedState.results[0][candidate] = parseFloat(val);
@@ -244,6 +260,11 @@ function resetMap() {
     for (let s in stateData) {
         stateData[s].results.splice(1);
     }
+}
+
+// Reset state allocated points
+function resetState() {
+    console.log("reset state button pressed");
 }
 
 // Counts total spent percentage points in a state's results
