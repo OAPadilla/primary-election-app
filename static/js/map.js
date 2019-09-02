@@ -3,7 +3,9 @@ let stateName;
 const svg = d3.select("svg");
 const path = d3.geoPath();
 
-// US Map Generation with D3
+/**
+ * US Map Generation with D3
+ */
 d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
     if (error) throw error;
 
@@ -235,7 +237,7 @@ function updateStateResultsByClick(candidate, selectedState, d3State) {
 /**
  * Gets top candidate by delegate value in state's results.
  * 
- * @param {object}  selectedState US state attributes.
+ * @param  {object} selectedState US state attributes.
  * @return {string} Top candidate name.
  */
 function getStateTopCandidate(selectedState) {
@@ -259,7 +261,11 @@ function resetMap() {
     }
 }
 
-// Counts total spent percentage points in a state's results
+/**
+ * Counts total allocated percentage points in a state's results.
+ * 
+ * @param {object} selectedState US state attributes.
+ */
 function getTotalAssignedPercentages(selectedState) {
     let result = 0;
     for (let key in selectedState.results[0]) {
@@ -312,13 +318,22 @@ function calculateDelegates(selectedState) {
     return delegates;
 }
 
-// Adds delegates calculated in state to stateData to be officially a part of national count
+/**
+ * Overwrites delegates calculated in state to stateData to be officially a part of national count.
+ * 
+ * @param {object} selectedState US state attributes.
+ * @param {object} delegates     Contains delegate value for all candidates in state.
+ */
 function addDelegatesOfficially(selectedState, delegates) {
     selectedState.results[1] = delegates;
 }
 
-// Converts rgb(,,) values to hex
-// Modified from Source: StackOverflow, by user Kaiido.
+/**
+ * Converts rgb(,,) value to hex.
+ * Modified from Source: StackOverflow, by user Kaiido.
+ * 
+ * @param {string} orig rgb(_, _, _)
+ */
 function rgba2hex(orig) {
     let rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i),
         hex = rgb ?
