@@ -314,43 +314,8 @@ function resetState(selectedState, d3State) {
     for (let key in selectedState.results[0]) {
         selectedState.results[0][key] = 0;
     }
-    // Update HTML
-    $("#state-options-available-perc").html(`
-        <button type="button" class="btn btn-default btn-sm" id="reset-state">
-            <span class="glyphicon glyphicon-refresh"></span>
-        </button>
-        Available Percentage Points: 100`);
 
-    // State candidate results
-    $("#state-options-rows tbody").html('');
-    for (let j = 0; j < candidateData.length; j++) {
-        // Table rows html
-        $("#state-options-rows tbody").append(`
-            <tr id="` + candidateData[j].name + `">
-               <td id="addon-cand">` + candidateData[j].name  + `</td>
-               <td><input type="number" class="form-control" id="perc-` + candidateData[j].index + `" aria-label="..."
-                   name="` + candidateData[j].name + `" oninput="validity.valid||(value='');"
-                   min="0" max="` + selectedState.delegates + `" step=0.1
-                   value="0">%</td>
-               <td id="addon-del" name="` + candidateData[j].name + `"></td>
-            </tr>
-        `);
-
-        // Calculate delegate count for current present percentages
-        let delegates = calculateDelegates(selectedState)
-        // Update HTML of canddate delegate count
-        showDelegates(delegates);
-        // Removes state delegates to stateData officially for national count when not Custom mode
-        updateDelegatesOfficially(selectedState, delegates);
-
-        // Event Listener for when a value is updated
-        $("#perc-" + candidateData[j].index).on("change", function() {
-            updateStateResults(this.value, this.name, selectedState, d3State);
-            let delegates = calculateDelegates(selectedState)
-            showDelegates(delegates);
-            updateDelegatesOfficially(selectedState, delegates);
-        });
-    }
+    showStateResults(selectedState, d3State);
 }
 
 /**
