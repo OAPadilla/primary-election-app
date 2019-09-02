@@ -242,7 +242,7 @@ function updateStateResults(val, candidate, selectedState, d3State) {
 
 // Updates State Data with results when clicked with candidate choice
 function updateStateResultsByClick(candidate, selectedState, d3State) {
-    const selectedCandidateVal = selectedState.results[0][candidate];
+    let selectedCandidateVal = selectedState.results[0][candidate];
 
     // Find candidate with greatest result in state
     let topCandidate = getStateTopCandidate(selectedState);
@@ -251,6 +251,7 @@ function updateStateResultsByClick(candidate, selectedState, d3State) {
     if (!topCandidate) {
         selectedState = setStateResults(selectedState);
         topCandidate = getStateTopCandidate(selectedState);
+        selectedCandidateVal = defaultResults[candidate]; 
     }
 
     const topCandidateVal = selectedState.results[0][topCandidate];
