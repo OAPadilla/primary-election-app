@@ -41,8 +41,8 @@ def get_state_data():
     return jsonify(states), 200
 
 
-@application.route("/api/get_default_results", methods=['GET'])
-def get_default_results():
+@application.route("/api/get_default_results_data", methods=['GET'])
+def get_default_results_data():
     return jsonify(default_results), 200
 
 
