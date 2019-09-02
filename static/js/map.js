@@ -3,7 +3,9 @@ let stateName;
 const svg = d3.select("svg");
 const path = d3.geoPath();
 
-// US Map Generation with D3
+/**
+ * US Map Generation with D3
+ */
 d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
     if (error) throw error;
 
@@ -31,7 +33,7 @@ d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
         .append("path")
         .attr("d", path)
         .on("mousedown.log", function(d) {
-            stateName = names[d.id]
+            stateName = names[d.id];
         })
         .on("click", selectState);
 
@@ -45,46 +47,53 @@ d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
     defaultColor = $('.states').css("fill");
 });
 
-// Clicking On States Actions
-function selectState () {
+/**
+ * Actions when state clicked.
+ */
+function selectState() {
     // Get selected candidate name
-    const candidateName = d3.select("input[name='candidate']:checked").property("value");
-    console.log(candidateName)
-    console.log(stateName)
+    const candidateName = getCandidate();
+    console.log(candidateName + ': ' + stateName);
 
-    // If user selected state with candidate chosen
-    if (candidateName !== "Custom") {
-        // Update state color depending on candidate
-        updateStateColorByClick(candidateName, d3.select(this));
-
-        // Selected State Options HTML
-        for (let i = 0; i < stateData.length; i++) {
-            if (stateData[i].name === stateName) {
+    for (let i = 0; i < stateData.length; i++) {
+        if (stateData[i].name === stateName) {
+            // If user selected state with candidate chosen
+            if (candidateName !== "Custom") {
+                // Update state color depending on candidate
+                // updateStateColor(candidateName, d3.select(this));
                 // Update State Data results with chosen color candidate as first
                 updateStateResultsByClick(candidateName, stateData[i], d3.select(this));
-                // Display state description and candidate results
+                // Display state description and candidate results, and update delegates
+                showStateResults(stateData[i], d3.select(this));
+            // Else, user selected state with Custom
+            } else {
+                // Display state description and candidate results, and update delegates
                 showStateResults(stateData[i], d3.select(this), true);
-                break;
             }
+            break;
         }
-    // Else, user selected state with Custom
-    } else {
-        // Selected State Options HTML
-        for (let i = 0; i < stateData.length; i++) {
-            if (stateData[i].name === stateName) {
-                // State description and candidate results
-                showStateResults(stateData[i], d3.select(this), false);
-                break;
-            }
-        }
-
     }
 }
 
-// Updates US Map SVG State to appropriate color based on candidate chosen
-function updateStateColorByClick(candidateName, d3State) {
+/**
+ * Get currently selected candidate name.
+ * 
+ * @return {string} Candidate's name.
+ */
+function getCandidate() {
+    return d3.select("input[name='candidate']:checked").property("value");
+}
+
+/**
+ * Updates US Map SVG state color based on candidate.
+ * 
+ * @param {string} candidateName Selected candidate's name.
+ * @param {object} d3State       US state D3 object.
+ */
+function updateStateColor(candidateName, d3State) {
     // Get current color of selected state, converted to hex
-    const currentColor =  rgba2hex(d3State.style('fill'));
+    // const previousColor =  rgba2hex(d3State.style('fill'));
+    // console.log(previousColor);
 
     // Get candidates color
     let candidateColor = defaultColor;
@@ -95,29 +104,20 @@ function updateStateColorByClick(candidateName, d3State) {
     }
 
     // Change state color to default if same candidate color, otherwise change to new color
-    if (currentColor === candidateColor) {
-        d3State.style("fill", defaultColor);
-    } else {
-        d3State.style("fill", candidateColor);
-    }
-}
-
-// Updates US Map SVG State to appropriate color based on candidate
-function updateStateColor(candidateName, selectedState, d3State) {
-    // Get candidates color
-    let candidateColor = defaultColor;
-    for (let i = 0; i < candidateData.length; ++i) {
-        if (candidateData[i].name === candidateName) {
-            candidateColor = candidateData[i].color;
-        }
-    }
+    // const color = previousColor === candidateColor ? defaultColor : candidateColor;
 
     // Update color of selected state too apropriate candidates color
     d3State.style("fill", candidateColor);
 }
 
-// Update HTML for State Options that contains State description and results
-function showStateResults(selectedState, d3State, appendDelegatesFlag) {
+/**
+ * Update HTML and state data for State Options that contains State description and results.
+ * 
+ * @param {object}  selectedState US state attributes.
+ * @param {object}  d3State       US state D3 object.
+ * @param {boolean} isCustom      Check if in custom mode to add state delegates.
+ */
+function showStateResults(selectedState, d3State, isCustom = false) {
     // Get Total Percentage points available to be assigned in state Results
     const availablePercPoints = Math.round(10*(100 - getTotalAssignedPercentages(selectedState)))/10;
 
@@ -165,23 +165,32 @@ function showStateResults(selectedState, d3State, appendDelegatesFlag) {
             </tr>
         `);
 
-        // Gets state's candidate delegate counts
-        showDelegates(selectedState, appendDelegatesFlag);
+        // Calculate delegate count for current present percentages
+        let delegates = calculateDelegates(selectedState)
+        // Update HTML of canddate delegate count
+        showDelegates(delegates);
+
+        // Adds state delegates to stateData officially for national count when not Custom mode
+        if (!isCustom) {
+            addDelegatesOfficially(selectedState, delegates);
+        }
 
         // Event Listener for when a value is updated
         $("#perc-" + candidateData[j].index).on("change", function() {
             updateStateResults(this.value, this.name, selectedState, d3State);
-            // showDelegates has appendDelegatesFlag=true so delegate count is officially counted nationally
-            showDelegates(selectedState, true);
+            let delegates = calculateDelegates(selectedState)
+            showDelegates(delegates);
+            addDelegatesOfficially(selectedState, delegates);
         });
     }
 }
 
-// Calculates and updates HTML with candidate delegate count for states
-function showDelegates(selectedState, appendDelegatesFlag) {
-    // Calculate delegate count for current present percentages
-    const delegates = calculateDelegates(selectedState, appendDelegatesFlag);
-
+/**
+ * Updates HTML in State Options section with candidate delegate count for states.
+ * 
+ * @param {object} delegates Contains delegate value for all candidates in state.
+ */
+function showDelegates(delegates) {
     // Update HTML for candidate delegate counts
     $("#state-options-rows tbody tr").children("td#addon-del").text("")
     $.each(delegates, function(index, val) {
@@ -223,8 +232,8 @@ function updateStateResults(val, candidate, selectedState, d3State) {
     });
 
     // Update color of state to top candidate
-    const topCandidate = getStateTopCandidate(candidate, selectedState);
-    updateStateColor(topCandidate, selectedState, d3State);
+    const topCandidate = getStateTopCandidate(selectedState);
+    updateStateColor(topCandidate, d3State);
 }
 
 // Updates State Data with results when clicked with candidate choice
@@ -232,7 +241,7 @@ function updateStateResultsByClick(candidate, selectedState, d3State) {
     const selectedCandidateVal = selectedState.results[0][candidate];
 
     // Find candidate with greatest result in state
-    const topCandidate = getStateTopCandidate(candidate, selectedState);
+    const topCandidate = getStateTopCandidate(selectedState);
     const topCandidateVal = selectedState.results[0][topCandidate];
 
     // Update top candidate with selected candidates val
@@ -241,15 +250,21 @@ function updateStateResultsByClick(candidate, selectedState, d3State) {
     updateStateResults(topCandidateVal, candidate, selectedState, d3State);
 }
 
-// Gets current top candidate in state's results
-function getStateTopCandidate(candidate, selectedState) {
-    let topCandidate = candidate;
+/**
+ * Gets top candidate by delegate value in state's results.
+ * 
+ * @param  {object} selectedState US state attributes.
+ * @return {string} Top candidate name.
+ */
+function getStateTopCandidate(selectedState) {
+    let topValue = Math.max(...Object.values(selectedState.results[0]));
+
     for (let c in selectedState.results[0]) {
-        if (selectedState.results[0][c] > selectedState.results[0][topCandidate]) {
-            topCandidate = c;
+        if (selectedState.results[0][c] == topValue) {
+            return c;
         }
     }
-    return topCandidate;
+    return '';
 }
 
 // Resets Map Back to Default
@@ -267,7 +282,11 @@ function resetState() {
     console.log("reset state button pressed");
 }
 
-// Counts total spent percentage points in a state's results
+/**
+ * Counts total allocated percentage points in a state's results.
+ * 
+ * @param {object} selectedState US state attributes.
+ */
 function getTotalAssignedPercentages(selectedState) {
     let result = 0;
     for (let key in selectedState.results[0]) {
@@ -276,10 +295,15 @@ function getTotalAssignedPercentages(selectedState) {
     return result;
 }
 
-// Democratic delegate allocation calculation
-function calculateDelegates(selectedState, appendDelegatesFlag) {
-    const delegates = {};   // {name: delegates}
-    let total = 0;          // total percentage over 15
+/**
+ * Calculate Democratic delegate allocation.
+ * 
+ * @param  {object} selectedState US state attributes.
+ * @return {object} Delegate count for candidates in state.
+ */
+function calculateDelegates(selectedState) {
+    const delegates = {}; // {name: delegates}
+    let total = 0;        // total percentage over 15
 
     // Get results of candidates in selected state with >=15%
     for (let key in selectedState.results[0]) {
@@ -289,8 +313,8 @@ function calculateDelegates(selectedState, appendDelegatesFlag) {
         }
     }
 
-    const fractalRemainders = {};       // {name: fractal remainder delegates}
-    let leftoverDelegates = selectedState.delegates;  // total delegates available
+    const fractalRemainders = {};                    // {name: fractal remainder delegates}
+    let leftoverDelegates = selectedState.delegates; // total delegates available
 
     // Retabulate percentages and calculate number of delegates
     for (let key in delegates) {
@@ -302,32 +326,35 @@ function calculateDelegates(selectedState, appendDelegatesFlag) {
 
     // Allocate extra delegates to max fractal remainders in decreasing order
     let keys = Object.keys(fractalRemainders);
-    keys.sort(function(a,b) {           // Sort array of keys based on values
+    keys.sort(function(a,b) {        // Sort array of keys based on values
         return fractalRemainders[b] - fractalRemainders[a];
     })
     for (let k in keys) {
         if (leftoverDelegates > 0) {
-            delegates[keys[k]] += 1;    // Allocate extra delegate to candidate
-            leftoverDelegates -= 1;     // Remove 1 from the leftover delegates
+            delegates[keys[k]] += 1; // Allocate extra delegate to candidate
+            leftoverDelegates -= 1;  // Remove 1 from the leftover delegates
         }
-    }
-
-    // If flag true, adds state delegates to stateData officially for national count
-    // Flag is true when a state is colored in, otherwise don't consider results official
-    if (appendDelegatesFlag) {
-        addDelegatesOfficially(selectedState, delegates);
     }
 
     return delegates;
 }
 
-// Adds delegates calculated in state to stateData to be officially a part of national count
+/**
+ * Overwrites delegates calculated in state to stateData to be officially a part of national count.
+ * 
+ * @param {object} selectedState US state attributes.
+ * @param {object} delegates     Contains delegate value for all candidates in state.
+ */
 function addDelegatesOfficially(selectedState, delegates) {
     selectedState.results[1] = delegates;
 }
 
-// Converts rgb(,,) values to hex
-// Modified from Source: StackOverflow, by user Kaiido.
+/**
+ * Converts rgb(,,) value to hex.
+ * Modified from Source: StackOverflow, by user Kaiido.
+ * 
+ * @param {string} orig rgb(_, _, _)
+ */
 function rgba2hex(orig) {
     let rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i),
         hex = rgb ?
