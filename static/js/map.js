@@ -110,6 +110,10 @@ function updateStateColor(candidateName, d3State) {
     d3State.style("fill", candidateColor);
 }
 
+function removeStateColor(d3State) {
+    d3State.style("fill", defaultColor);
+}
+
 /**
  * Update HTML and state data for State Options that contains State description and results.
  * 
@@ -139,7 +143,7 @@ function showStateResults(selectedState, d3State, isCustom = false) {
 
     // OnClick reset state allocated percentage points all to zero
     $("#reset-state").on("click", function() {
-        resetState();
+        resetState(selectedState, d3State);
     });
 
     // Column titles
@@ -172,7 +176,7 @@ function showStateResults(selectedState, d3State, isCustom = false) {
 
         // Adds state delegates to stateData officially for national count when not Custom mode
         if (!isCustom) {
-            addDelegatesOfficially(selectedState, delegates);
+            updateDelegatesOfficially(selectedState, delegates);
         }
 
         // Event Listener for when a value is updated
@@ -180,7 +184,7 @@ function showStateResults(selectedState, d3State, isCustom = false) {
             updateStateResults(this.value, this.name, selectedState, d3State);
             let delegates = calculateDelegates(selectedState)
             showDelegates(delegates);
-            addDelegatesOfficially(selectedState, delegates);
+            updateDelegatesOfficially(selectedState, delegates);
         });
     }
 }
@@ -219,7 +223,7 @@ function updateStateResults(val, candidate, selectedState, d3State) {
 
     // OnClick reset state allocated percentage points all to zero
     $("#reset-state").on("click", function() {
-        resetState();
+        resetState(selectedState, d3State);
     });
 
     // Update candidate result
@@ -241,7 +245,14 @@ function updateStateResultsByClick(candidate, selectedState, d3State) {
     const selectedCandidateVal = selectedState.results[0][candidate];
 
     // Find candidate with greatest result in state
-    const topCandidate = getStateTopCandidate(selectedState);
+    let topCandidate = getStateTopCandidate(selectedState);
+
+    // If no top candidate due to unset results, use default poll results
+    if (!topCandidate) {
+        selectedState = setStateResults(selectedState);
+        topCandidate = getStateTopCandidate(selectedState);
+    }
+
     const topCandidateVal = selectedState.results[0][topCandidate];
 
     // Update top candidate with selected candidates val
@@ -259,12 +270,29 @@ function updateStateResultsByClick(candidate, selectedState, d3State) {
 function getStateTopCandidate(selectedState) {
     let topValue = Math.max(...Object.values(selectedState.results[0]));
 
+    if (topValue <= 0) {
+        return null;
+    }
+
     for (let c in selectedState.results[0]) {
         if (selectedState.results[0][c] == topValue) {
             return c;
         }
     }
-    return '';
+}
+
+/**
+ * Set state results to new results.
+ * 
+ * @param {object} selectedState US state attributes.
+ * @param {object} newResults    Default is defaultResults API data.
+ * @return Updated US state attributes.
+ */
+function setStateResults(selectedState, newResults = defaultResults) {
+    for (let c in selectedState.results[0]) {
+        selectedState.results[0][c] = newResults[c];
+    }
+    return selectedState;
 }
 
 // Resets Map Back to Default
@@ -278,8 +306,51 @@ function resetMap() {
 }
 
 // Reset state allocated points
-function resetState() {
+function resetState(selectedState, d3State) {
     console.log("reset state button pressed");
+    // Set state color to default
+    removeStateColor(d3State);    
+    // Deallocate delegates in stateData all to 0
+    for (let key in selectedState.results[0]) {
+        selectedState.results[0][key] = 0;
+    }
+    // Update HTML
+    $("#state-options-available-perc").html(`
+        <button type="button" class="btn btn-default btn-sm" id="reset-state">
+            <span class="glyphicon glyphicon-refresh"></span>
+        </button>
+        Available Percentage Points: 100`);
+
+    // State candidate results
+    $("#state-options-rows tbody").html('');
+    for (let j = 0; j < candidateData.length; j++) {
+        // Table rows html
+        $("#state-options-rows tbody").append(`
+            <tr id="` + candidateData[j].name + `">
+               <td id="addon-cand">` + candidateData[j].name  + `</td>
+               <td><input type="number" class="form-control" id="perc-` + candidateData[j].index + `" aria-label="..."
+                   name="` + candidateData[j].name + `" oninput="validity.valid||(value='');"
+                   min="0" max="` + selectedState.delegates + `" step=0.1
+                   value="0">%</td>
+               <td id="addon-del" name="` + candidateData[j].name + `"></td>
+            </tr>
+        `);
+
+        // Calculate delegate count for current present percentages
+        let delegates = calculateDelegates(selectedState)
+        // Update HTML of canddate delegate count
+        showDelegates(delegates);
+        // Removes state delegates to stateData officially for national count when not Custom mode
+        updateDelegatesOfficially(selectedState, delegates);
+
+        // Event Listener for when a value is updated
+        $("#perc-" + candidateData[j].index).on("change", function() {
+            updateStateResults(this.value, this.name, selectedState, d3State);
+            let delegates = calculateDelegates(selectedState)
+            showDelegates(delegates);
+            updateDelegatesOfficially(selectedState, delegates);
+        });
+    }
 }
 
 /**
@@ -345,7 +416,7 @@ function calculateDelegates(selectedState) {
  * @param {object} selectedState US state attributes.
  * @param {object} delegates     Contains delegate value for all candidates in state.
  */
-function addDelegatesOfficially(selectedState, delegates) {
+function updateDelegatesOfficially(selectedState, delegates) {
     selectedState.results[1] = delegates;
 }
 

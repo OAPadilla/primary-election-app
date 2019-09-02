@@ -26,7 +26,8 @@ def home():
     return render_template("home.html",
         candidates=candidates,
         states=states,
-        total_delegates=total_delegates
+        total_delegates=total_delegates,
+        default_results=default_results
     )
 
 
@@ -38,6 +39,11 @@ def get_candidate_data():
 @application.route("/api/get_state_data", methods=['GET'])
 def get_state_data():
     return jsonify(states), 200
+
+
+@application.route("/api/get_default_results", methods=['GET'])
+def get_default_results():
+    return jsonify(default_results), 200
 
 
 @application.route("/about")
@@ -59,16 +65,22 @@ def get_total_delegates(states):
         total += state['delegates']
     return total
 
-
-def append_default_results(candidates, states):
+def get_default_results(candidates):
     """
-    Collects default poll numbers for candidates from candidates data and
-    appends those default results to each state in the state data
+    Returns default national poll numbers for candidates
     """
     results = {}
     for c in candidates:
         results[c['name']] = c['poll']
+    return results
 
+def append_empty_results(candidates, states):
+    """
+    Appends empty results to each state in the state data
+    """ 
+    results = {}
+    for c in candidates:
+        results[c['name']] = 0
     for state in states:
         state['results'] = [results]
 
@@ -121,7 +133,8 @@ conn.close()
 """ Query database and prepare data for client """
 candidates = query_db('''SELECT * FROM candidates_table ORDER BY poll DESC ''')
 states = query_db('''SELECT * FROM states_table''')
-append_default_results(candidates, states)
+default_results = get_default_results(candidates)
+append_empty_results(candidates, states)
 total_delegates = get_total_delegates(states)
 
 if __name__ == '__main__':

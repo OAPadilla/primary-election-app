@@ -5,6 +5,7 @@
 	var candidateData = JSON.parse('{{ candidates|tojson }}');
 	var stateData = JSON.parse('{{ states|tojson }}'); // stateData[0].results[x] -- x=0 is percentage, x=1 is delegates (once appended)
 	const totalDelegates = '{{ total_delegates }}';
+	const defaultResults = JSON.parse('{{ default_results|tojson }}');
 </script>
 
 <div class="container">
