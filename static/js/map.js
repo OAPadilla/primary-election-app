@@ -207,6 +207,8 @@ function updateStateResults(val, candidate, selectedState, d3State) {
     // Get available percentage points to assign a candidate
     let bucket = Math.round(10*(100 - getTotalAssignedPercentages(selectedState)))/10;
 
+    val = val == '' ? 0 : val;
+
     // Get difference between old and new updated result
     const diff = parseFloat(val) - selectedState.results[0][candidate];
 
