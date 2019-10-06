@@ -9,7 +9,7 @@ with state results and allocating delegates among presidential candidates on an 
 </table>
 
 ## Live Demo
-[PrimaryDraft.com](http://www.PrimaryDraft.com) - Deployed with AWS Elastic Beanstalk
+[PrimaryDraft.com](https://www.PrimaryDraft.com) - Deployed with AWS Elastic Beanstalk
 
 ## Preview
 ![Home Page - Map](https://i.imgur.com/mr8QX4T.png)
