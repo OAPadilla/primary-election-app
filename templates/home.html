@@ -5,6 +5,7 @@
 	var candidateData = JSON.parse('{{ candidates|tojson }}');
 	var stateData = JSON.parse('{{ states|tojson }}'); // stateData[0].results[x] -- x=0 is percentage, x=1 is delegates (once appended)
 	const totalDelegates = '{{ total_delegates }}';
+	const defaultResults = JSON.parse('{{ default_results|tojson }}');
 </script>
 
 <div class="container">
@@ -16,15 +17,19 @@
 			<div class="candidates">
 				<div class="btn-group" role="group" aria-label="..." data-toggle="buttons">
 					<label class="btn btn-default" role="group">
+						<img src="{{ url_for('static', filename='img/default_button.png') }}" height="12" width="12">
 						<input type="radio" name="candidate" value="Custom" checked><strong>Custom</strong>
 					</label>
 					{% for candidate in candidates %}
 					<label class="btn btn-default" role="group">
+						<img src="{{ url_for('static', filename='img/' + candidate.color + '.png') }}" height="12" width="12">
 						<input type="radio" name="candidate" value="{{ candidate.name }}">{{ candidate.name }}
 					</label>
 					{% endfor %}
 				</div>
-				<!-- <button type="button" class="btn btn-danger" id="reset-map"><strong>Reset</strong></button> -->
+				<!-- <button type="button" class="btn btn-default btn-md" id="reset-map">
+					<span class="glyphicon glyphicon-refresh"></span>
+				</button> -->
 			</div>
 		</div>
 	</div>
@@ -83,17 +88,15 @@
 		<div class="row">
 			<div class="col-xs-9 col-sm-8">
 				<h4 class="title-footer">Contact</h4>
-				<h5>Oscar@PrimaryDraft.com • Questions, comments, & feedback are welcome!</h5>
+				<h5>Oscar@PrimaryDraft.com • Questions, Comments, Feedback</h5>
 			</div>
 			<div class="col-xs-3 col-sm-4">
 				<h4 class="title-footer">Share</h4>
-				<!-- <a href="#" class="social"><i class="fab fa-twitter-square fa-2x" aria-hidden="true"></i></a> -->
+				<!-- Social share buttons -->
 				<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button"
-					data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
-				<!-- <div class="fb-share-button" data-href="https://www.PrimaryDraft.com" data-layout="button_count" data-size="small">
-					<a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.PrimaryDraft.com%2F&amp;src=sdkpreparse"
-					class="fb-xfbml-parse-ignore">Share</a></div> -->
+					data-show-count="false"></a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+				<iframe src="https://www.facebook.com/plugins/share_button.php?href=https%3A%2F%2Fwww.primarydraft.com&layout=button&size=small&width=59&height=20&appId" 
+					width="59" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allow="encrypted-media"></iframe>
 			</div>
 		</div>
 
